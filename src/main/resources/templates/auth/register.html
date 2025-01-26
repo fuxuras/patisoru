@@ -1,37 +1,48 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-</head> 
+    <title>Kayıt Ol</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+</head>
 <body>
-    <div class="container">
-        <div class="row vh-100 d-flex justify-content-center align-items-center">
-            <div class="col-md-6 card p-4">
-                <h1>Kayıt Ol</h1>
-                <form th:action="/register" method="post" class="needs-validation">
-                    <div class="mb-3">
-                        <label for="email" class="form-label">Email</label>
-                        <input type="text" class="form-control" id="email" name="email" required pattern="[^@]+@[^@]+\.[a-zA-Z]{2,6}">
-                        <div class="invalid-feedback">
-                            Lütfen geçerli bir email adresi giriniz.
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="password" class="form-label">Şifre</label>
-                        <input type="password" class="form-control" id="password" name="password" required minlength="8">
-                        <div class="invalid-feedback">
-                            Şifreniz en az 8 karakter olmalıdır.
-                        </div>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Kayıt Ol</button>
-                </form>
+<nav th:replace="common/navbar :: navbar"></nav>
+<div class="container">
+    <div class="row" style="height: 85vh">
+
+        <div class="col-md-6 m-auto" th:if="${responseMessage}">
+            <div th:classappend="${responseMessage.code > 0} ? 'alert alert-success' : 'alert alert-danger'"
+                 class="alert"
+                 role="alert">
+                <span th:text="${responseMessage.message}"></span>
             </div>
         </div>
 
+        <div class="col-md-6 card p-4 m-auto shadow-lg">
+            <h1>Kayıt Ol</h1>
+            <form th:action="@{/register}"  method="POST">
+                <div class="mb-3">
+                    <label for="fullName" class="form-label">Tam İsim</label>
+                    <input type="text" class="form-control" id="fullName" name="fullName" th:required="required">
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="text" class="form-control" id="email" name="email" th:required="required">
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Şifre</label>
+                    <input type="password" class="form-control" id="password" name="password" th:min="8" th:required="required">
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <button type="submit" class="btn btn-primary">Kayıt Ol</button>
+                </div>
+            </form>
+        </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+</div>
+<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
 </body>
 </html>
