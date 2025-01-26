@@ -3,8 +3,10 @@ package com.fuxuras.patisoru.controllers;
 import com.fuxuras.patisoru.dto.RegisterRequest;
 import com.fuxuras.patisoru.dto.ResponseMessage;
 import com.fuxuras.patisoru.services.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,7 +19,10 @@ public class AuthController {
     private final UserService userService;
 
     @GetMapping("/login")
-    public String login() {
+    public String login(HttpServletRequest request, Model model) {
+        ResponseMessage responseMessage = (ResponseMessage) request.getSession().getAttribute("message");
+        request.getSession().removeAttribute("message");
+        model.addAttribute("message", responseMessage);
         return "/auth/login";
     }
 
