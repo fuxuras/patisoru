@@ -7,20 +7,21 @@
     <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
 </head>
 <body>
-<nav th:replace="common/navbar :: navbar"></nav>
+<nav th:replace="~{common/navbar :: navbar}"></nav>
 <div class="container">
     <div class="row" style="height: 85vh">
 
-        <div class="col-md-6 m-auto" th:if="${responseMessage}">
-            <div th:classappend="${responseMessage.code > 0} ? 'alert alert-success' : 'alert alert-danger'"
-                 class="alert"
-                 role="alert">
-                <span th:text="${responseMessage.message}"></span>
-            </div>
-        </div>
+
 
         <div class="col-md-6 card p-4 m-auto shadow-lg">
             <h1>Kayıt Ol</h1>
+            <div  th:if="${message}">
+                <div th:classappend="${message.code > 0} ? 'alert alert-success' : 'alert alert-danger'"
+                     class="alert"
+                     role="alert">
+                    <span th:text="${message.message}"></span>
+                </div>
+            </div>
             <form th:action="@{/register}"  method="POST">
                 <div class="mb-3">
                     <label for="fullName" class="form-label">Tam İsim</label>
