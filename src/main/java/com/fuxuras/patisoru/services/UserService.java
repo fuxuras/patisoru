@@ -19,7 +19,7 @@ public class UserService {
     public ResponseMessage createUser(RegisterRequest registerRequest) {
         if (userRepository.existsByEmail(registerRequest.getEmail())){
             ResponseMessage responseMessage = new ResponseMessage();
-            responseMessage.setMessage("Email already exists");
+            responseMessage.setMessage("Email başka bir kulannıcı tarafından kullanılıyor");
             responseMessage.setCode(-1);
             return responseMessage;
         }
@@ -28,7 +28,7 @@ public class UserService {
         user.setRole("USER");
         userRepository.save(user);
         ResponseMessage responseMessage = new ResponseMessage();
-        responseMessage.setMessage("User created");
+        responseMessage.setMessage("Başarıyla kayıt oldunuz");
         responseMessage.setCode(1);
         return responseMessage;
     }
