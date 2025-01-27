@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-
+    private final DtoMapper mapper;
 
     public ResponseMessage createUser(RegisterRequest registerRequest) {
         if (userRepository.existsByEmail(registerRequest.getEmail())){
@@ -23,7 +23,7 @@ public class UserService {
             responseMessage.setCode(-1);
             return responseMessage;
         }
-        User user = DtoMapper.INSTANCE.RegisterRequestToUser(registerRequest);
+        User user = mapper.RegisterRequestToUser(registerRequest);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRole("USER");
         userRepository.save(user);
