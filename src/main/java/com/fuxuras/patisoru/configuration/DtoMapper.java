@@ -1,10 +1,7 @@
 package com.fuxuras.patisoru.configuration;
 
 
-import com.fuxuras.patisoru.dto.CommentInPostResponse;
-import com.fuxuras.patisoru.dto.PostResponse;
-import com.fuxuras.patisoru.dto.RegisterRequest;
-import com.fuxuras.patisoru.dto.UserInPostResponse;
+import com.fuxuras.patisoru.dto.*;
 import com.fuxuras.patisoru.entities.Comment;
 import com.fuxuras.patisoru.entities.Post;
 import com.fuxuras.patisoru.entities.User;
@@ -21,4 +18,8 @@ public interface DtoMapper {
     UserInPostResponse userToUserInPostResponse(User user);
 
     CommentInPostResponse commentToCommentInPostResponse(Comment comment);
+
+    FeaturedPost postToFeaturedPost(Post post);
+
+    UserInFeaturedPost userToUserInFeaturedPost(User user);
 }
