@@ -1,12 +1,10 @@
 package com.fuxuras.patisoru.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fuxuras.patisoru.entities.abstracts.BaseEntity;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,6 +20,7 @@ import java.util.List;
 public class Post extends BaseEntity{
     private String title;
     private String text;
+    private Long likeCount;
 
     @ManyToOne
     @JsonBackReference
@@ -30,4 +29,10 @@ public class Post extends BaseEntity{
     @OneToMany(mappedBy = "post")
     @JsonManagedReference
     private List<Comment> comments;
+
+    @OneToMany(mappedBy = "post")
+    @JsonIgnore
+    List<Like> likes;
+
+
 }
