@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="tr" xmlns:th="http://www.thymeleaf.org">
+<html lang="tr" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
 </head>
@@ -14,13 +14,18 @@
             <div class="collapse navbar-collapse" id="navbarText">
               <ul class="navbar-nav mb-2 mb-lg-0 w-100">
                 <li class="nav-item">
-                  <a class="nav-link active" aria-current="page" th:href="@{/}">Home</a>
+                  <a class="nav-link active" aria-current="page" th:href="@{/}">Anasayfa</a>
                 </li>
-                <li class="nav-item ms-lg-auto ">
-                  <a class="nav-link" th:href="@{/login}">Login</a>
+                <li sec:authorize="!isAuthenticated()" class="nav-item ms-lg-auto ">
+                  <a class="nav-link" th:href="@{/login}">Giriş Yap</a>
                 </li>
-                <li class="nav-item">
-                  <a class="nav-link" th:href="@{/register}">Register</a>
+                <li sec:authorize="!isAuthenticated()" class="nav-item">
+                  <a class="nav-link" th:href="@{/register}">Kayıt Ol</a>
+                </li>
+                <li sec:authorize="isAuthenticated()" class="nav-item">
+                  <form th:action="@{/logout}" method="post">
+                      <button type="submit" class="nav-link">Çıkış Yap</button>
+                  </form>
                 </li>
               </ul>
             </div>
