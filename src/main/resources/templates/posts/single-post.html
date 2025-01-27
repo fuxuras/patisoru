@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="tr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+</head>
+<body>
+<th:block th:replace="~{common/navbar :: navbar}"></th:block>
+<div class="container">
+    <div class="row card my-5">
+        <div class="col card-header">
+            <p th:text="${post.user.fullName}"></p>
+        </div>
+        <div class="col card-body">
+            <h2 th:text="${post.title}" class="card-title text-primary"></h2>
+            <p th:text="${post.text}" class="card-text"></p>
+        </div>
+    </div>
+
+
+    <div th:each="comment : ${post.comments}" class="row  card">
+        <div class="col card-header">
+            <p th:text="${comment.user.fullName}"></p>
+        </div>
+        <div class="col card-body">
+            <p th:text="${comment.text}" class="card-text"></p>
+        </div>
+    </div>
+
+
+
+
+</div>
+<th:block th:replace="~{common/footer :: footer}"></th:block>
+
+<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+</body>
+</html>
