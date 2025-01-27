@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Date;
 import java.util.UUID;
 
 @Getter
@@ -13,6 +14,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class CommentInPostResponse {
     private UUID id;
+    private Date createdAt;
     private String text;
     private UserInPostResponse user;
 }

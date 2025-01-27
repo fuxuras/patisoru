@@ -12,6 +12,7 @@
     <div class="row card my-5">
         <div class="col card-header">
             <p th:text="${post.user.fullName}"></p>
+            <p th:text="${post.createdAt}"></p>
         </div>
         <div class="col card-body">
             <h2 th:text="${post.title}" class="card-title text-primary"></h2>
@@ -23,6 +24,7 @@
     <div th:each="comment : ${post.comments}" class="row  card">
         <div class="col card-header">
             <p th:text="${comment.user.fullName}"></p>
+            <p th:text="${comment.createdAt}"></p>
         </div>
         <div class="col card-body">
             <p th:text="${comment.text}" class="card-text"></p>
