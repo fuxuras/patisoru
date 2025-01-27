@@ -23,8 +23,17 @@
                 <img th:src="@{/photos/hero.png}" alt="Sevimli evcil hayvanlar" class="img-fluid m-auto">
             </div>
         </div>
-        <div class="row">
-            <!-- TODO: featured posts section here -->
+        <h3 class="h3 text-primary border-top py-5 ps-2 row">Öne Çıkan Paylaşımlar</h3>
+        <div class="row row-cols-2 row-cols-md-5 g-4">
+            <div class="col" th:each="post : ${featuredPosts}">
+                <div class="shadow card h-100">
+                    <div class="card-header" th:text="${post.user.fullName}"></div>
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${post.title}"></h5>
+                        <p class="card-text" th:text=" 'Likes: ' + ${post.likeCount}"></p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
