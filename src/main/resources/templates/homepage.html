@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="tr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giriş Yap</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+</head>
+<body>
+<th:block th:replace="~{common/navbar :: navbar}"></th:block>
+
+<div class="hero bg-light text-center py-5">
+    <div class="container">
+        <div class="row">
+            <div class="text-center my-auto col-md-6 col-sm-12">
+                <h1 class="display-4 text-primary px-3">Hoş Geldiniz, PatiSoru'ya!</h1>
+                <p class="lead text-secondary px-3">
+                    Evcil hayvanlarınız hakkında her şeyi sorabileceğiniz bir topluluk.
+                    Sorularınızı sorun, fikirlerinizi paylaşın ve veterinerlerden öneri alın!
+                </p>
+            </div>
+            <div class="col-md-6">
+                <img th:src="@{/photos/hero.png}" alt="Sevimli evcil hayvanlar" class="img-fluid m-auto">
+            </div>
+        </div>
+        <div class="row">
+            <!-- TODO: featured posts section here -->
+        </div>
+    </div>
+</div>
+
+
+<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+</body>
+</html>
