@@ -8,7 +8,7 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -23,10 +23,10 @@ public abstract class BaseEntity implements Serializable {
 
    @CreationTimestamp
    @Column(updatable = false)
-   private Date createdAt;
+   private LocalDateTime createdAt;
 
    @UpdateTimestamp
-   private Date updatedAt;
+   private LocalDateTime updatedAt;
 
     @Override
     public boolean equals(Object o) {
