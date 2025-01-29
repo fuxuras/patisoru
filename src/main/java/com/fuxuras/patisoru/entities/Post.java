@@ -34,5 +34,11 @@ public class Post extends BaseEntity{
     @JsonIgnore
     List<Like> likes;
 
+    @PrePersist
+    public void prePersist(){
+        if(likeCount == null){
+            likeCount = 0L;
+        }
+    }
 
 }
