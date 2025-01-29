@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="tr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+</head>
+<body>
+<th:block th:replace="~{common/navbar :: navbar}"></th:block>
+<div class="container">
+    <div class="row card my-5">
+        <div class="col card-header">
+            Hesap Bilgileri
+        </div>
+        <div class="col card-body">
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item" th:text=" 'Tam isim: ' + ${user.fullName}"></li>
+                <li class="list-group-item" th:text=" 'Email: ' + ${user.email}"></li>
+                <li class="list-group-item" th:text=" 'Oluşturulma tarihi : ' + ${user.createdAt}"></li>
+            </ul>
+            <a th:href="@{/profile/edit}" class="btn btn-primary">Düzenle</a>
+        </div>
+    </div>
+
+
+
+</div>
+<th:block th:replace="~{common/footer :: footer}"></th:block>
+
+<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+</body>
+</html>

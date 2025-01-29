@@ -25,7 +25,10 @@
                 <li sec:authorize="!isAuthenticated()" class="nav-item">
                   <a class="nav-link" th:href="@{/register}">Kayıt Ol</a>
                 </li>
-                <li sec:authorize="isAuthenticated()" class="nav-item ms-lg-auto">
+                  <li sec:authorize="isAuthenticated()" class="nav-item ms-lg-auto">
+                      <a class="nav-link" th:href="@{/profile}">Profil</a>
+                  </li>
+                <li sec:authorize="isAuthenticated()" class="nav-item">
                   <form th:action="@{/logout}" method="post">
                       <button type="submit" class="nav-link">Çıkış Yap</button>
                   </form>
