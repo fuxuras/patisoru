@@ -3,6 +3,7 @@ package com.fuxuras.patisoru.services;
 import com.fuxuras.patisoru.configuration.DtoMapper;
 import com.fuxuras.patisoru.dto.RegisterRequest;
 import com.fuxuras.patisoru.dto.ResponseMessage;
+import com.fuxuras.patisoru.dto.UserResponse;
 import com.fuxuras.patisoru.entities.User;
 import com.fuxuras.patisoru.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -39,4 +40,9 @@ public class UserService {
         return userRepository.findByEmail(email);
     }
 
+    public UserResponse getByEmail(String email) {
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("user not found"));
+        UserResponse userResponse = mapper.userToUserResponse(user);
+        return userResponse;
+    }
 }
