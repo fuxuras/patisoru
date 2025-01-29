@@ -7,6 +7,7 @@ import com.fuxuras.patisoru.entities.Post;
 import com.fuxuras.patisoru.entities.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.factory.Mappers;
 
 @Mapper(componentModel = "spring")
@@ -26,4 +27,7 @@ public interface DtoMapper {
     Post PostCreateRequestToPost(PostCreateRequest postCreateRequest);
 
     UserResponse userToUserResponse(User user);
+
+
+    void updateUserFromRequest(UserEditRequest userEditRequest, @MappingTarget User user);
 }
