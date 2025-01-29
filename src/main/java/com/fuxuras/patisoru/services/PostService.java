@@ -2,8 +2,11 @@ package com.fuxuras.patisoru.services;
 
 import com.fuxuras.patisoru.configuration.DtoMapper;
 import com.fuxuras.patisoru.dto.FeaturedPost;
+import com.fuxuras.patisoru.dto.PostCreateRequest;
 import com.fuxuras.patisoru.dto.PostResponse;
+import com.fuxuras.patisoru.dto.ResponseMessage;
 import com.fuxuras.patisoru.entities.Post;
+import com.fuxuras.patisoru.entities.User;
 import com.fuxuras.patisoru.repositories.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,6 +22,7 @@ import java.util.stream.Collectors;
 public class PostService {
     private final PostRepository postRepository;
     private final DtoMapper mapper;
+    private final UserService userService;
 
 
     public PostResponse getPostById(UUID id) {
@@ -33,5 +37,17 @@ public class PostService {
                 .map(mapper::postToFeaturedPost)
                 .collect(Collectors.toList());
         return featuredPosts;
+    }
+
+    public ResponseMessage create(PostCreateRequest postCreateRequest, String name) {
+        User user = userService.findByEmail(name).orElseThrow(()-> new RuntimeException("User not found"));
+        Post post = mapper.PostCreateRequestToPost(postCreateRequest);
+        post.setUser(user);
+        postRepository.save(post);
+
+        ResponseMessage responseMessage = new ResponseMessage();
+        responseMessage.setMessage("Post created");
+        responseMessage.setCode(1);
+        return responseMessage;
     }
 }
