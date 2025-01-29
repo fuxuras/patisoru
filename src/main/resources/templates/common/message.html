@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="tr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+</head>
+<body>
+
+<div  th:fragment="message" th:if="${message}">
+    <div th:classappend="${message.code > 0} ? 'alert alert-success' : 'alert alert-danger'"
+         class="alert"
+         role="alert">
+        <span th:text="${message.message}"></span>
+    </div>
+</div>
+
+    
+
+    <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+</body>
+</html>

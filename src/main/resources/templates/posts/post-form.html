@@ -17,13 +17,8 @@
         <div class="col-md-6 card p-4 m-auto shadow-lg">
             <h1>Gönderi Oluştur</h1>
 
-            <div  th:if="${message}">
-                <div th:classappend="${message.code > 0} ? 'alert alert-success' : 'alert alert-danger'"
-                     class="alert"
-                     role="alert">
-                    <span th:text="${message.message}"></span>
-                </div>
-            </div>
+            <th:block th:replace="common/message :: message"></th:block>
+
 
             <form th:action="@{/post/create}"  method="POST">
                 <div class="mb-3">
