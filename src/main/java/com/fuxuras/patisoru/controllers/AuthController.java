@@ -20,9 +20,11 @@ public class AuthController {
 
     @GetMapping("/login")
     public String login(HttpServletRequest request, Model model) {
-        ResponseMessage responseMessage = (ResponseMessage) request.getSession().getAttribute("message");
-        request.getSession().removeAttribute("message");
-        model.addAttribute("message", responseMessage);
+        if(request.getSession().getAttribute("message") != null) {
+            ResponseMessage responseMessage = (ResponseMessage) request.getSession().getAttribute("message");
+            request.getSession().removeAttribute("message");
+            model.addAttribute("message", responseMessage);
+        }
         return "/auth/login";
     }
 
