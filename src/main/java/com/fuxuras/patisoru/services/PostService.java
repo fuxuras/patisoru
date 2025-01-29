@@ -46,7 +46,7 @@ public class PostService {
         postRepository.save(post);
 
         ResponseMessage responseMessage = new ResponseMessage();
-        responseMessage.setMessage("Post created");
+        responseMessage.setMessage("Gönderiniz başarıyla paylaşıldı.");
         responseMessage.setCode(1);
         return responseMessage;
     }
