@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="tr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+</head>
+<body>
+<th:block th:replace="~{common/navbar :: navbar}"></th:block>
+
+<div class="container">
+    <div class="row" style="height: 85vh">
+
+
+
+        <div class="col-md-6 card p-4 m-auto shadow-lg">
+            <h1>Gönderi Oluştur</h1>
+
+            <div  th:if="${message}">
+                <div th:classappend="${message.code > 0} ? 'alert alert-success' : 'alert alert-danger'"
+                     class="alert"
+                     role="alert">
+                    <span th:text="${message.message}"></span>
+                </div>
+            </div>
+
+            <form th:action="@{/post/create}"  method="POST">
+                <div class="mb-3">
+                    <label for="title" class="form-label">Başlık</label>
+                    <textarea type="text" class="form-control" id="title" name="title"></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="text" class="form-label">Gönderi Metni</label>
+                    <textarea type="text" class="form-control" id="text" name="text"></textarea>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <button type="submit" class="btn btn-primary">Paylaş</button>
+                    <a th:href="@{/}" class="btn btn-danger">İptal</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+
+<th:block th:replace="~{common/footer :: footer}"></th:block>
+<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+</body>
+</html>
