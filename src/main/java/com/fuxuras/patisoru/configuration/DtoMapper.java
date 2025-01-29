@@ -24,4 +24,6 @@ public interface DtoMapper {
     UserInFeaturedPost userToUserInFeaturedPost(User user);
 
     Post PostCreateRequestToPost(PostCreateRequest postCreateRequest);
+
+    UserResponse userToUserResponse(User user);
 }
