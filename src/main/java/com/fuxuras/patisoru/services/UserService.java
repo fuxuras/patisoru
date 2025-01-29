@@ -3,6 +3,7 @@ package com.fuxuras.patisoru.services;
 import com.fuxuras.patisoru.configuration.DtoMapper;
 import com.fuxuras.patisoru.dto.RegisterRequest;
 import com.fuxuras.patisoru.dto.ResponseMessage;
+import com.fuxuras.patisoru.dto.UserEditRequest;
 import com.fuxuras.patisoru.dto.UserResponse;
 import com.fuxuras.patisoru.entities.User;
 import com.fuxuras.patisoru.repositories.UserRepository;
@@ -44,5 +45,13 @@ public class UserService {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("user not found"));
         UserResponse userResponse = mapper.userToUserResponse(user);
         return userResponse;
+    }
+
+    public ResponseMessage editUser(UserEditRequest userEditRequest, String oldEmail) {
+        User user = userRepository.findByEmail(oldEmail).orElseThrow(() -> new RuntimeException("user not found"));
+        mapper.updateUserFromRequest(userEditRequest, user);
+        userRepository.save(user);
+        ResponseMessage responseMessage = new ResponseMessage("Hesap Bilgileri Güncellendi",1);
+        return responseMessage;
     }
 }
