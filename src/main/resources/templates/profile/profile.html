@@ -9,20 +9,24 @@
 <body class="bg-light">
 <th:block th:replace="~{common/navbar :: navbar}"></th:block>
 <div class="container">
+    <div class="row" style="height: 85vh">
+        <div class="col-md-6 m-auto">
 
-    <th:block th:replace="common/message :: message"></th:block>
+            <th:block th:replace="common/message :: message"></th:block>
 
-    <div class="row card my-5 shadow">
-        <div class="col card-header">
-            Hesap Bilgileri
-        </div>
-        <div class="col card-body">
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item" th:text=" 'Tam isim: ' + ${user.fullName}"></li>
-                <li class="list-group-item" th:text=" 'Email: ' + ${user.email}"></li>
-                <li class="list-group-item" th:text=" 'Oluşturulma tarihi : ' + ${user.createdAt}"></li>
-            </ul>
-            <a th:href="@{/profile/edit}" class="btn btn-primary">Düzenle</a>
+            <div class="card">
+                <div class="card-header">
+                    Hesap Bilgileri
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush mb-2">
+                        <li class="list-group-item my-1" th:text=" 'Tam isim: ' + ${user.fullName}"></li>
+                        <li class="list-group-item my-1" th:text=" 'Email: ' + ${user.email}"></li>
+                        <li class="list-group-item my-1" th:text=" 'Oluşturulma tarihi : ' + ${user.createdAt}"></li>
+                    </ul>
+                    <a th:href="@{/profile/edit}" class="btn btn-primary">Düzenle</a>
+                </div>
+            </div>
         </div>
     </div>
 
