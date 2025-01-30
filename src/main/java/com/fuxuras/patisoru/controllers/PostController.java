@@ -31,6 +31,7 @@ public class PostController {
     public String create() {
         return "/posts/post-form";
     }
+
     @PostMapping("/create")
     public String create(@ModelAttribute PostCreateRequest post, Principal principal, RedirectAttributes redirectAttributes){
         ResponseMessage message = postService.create(post, principal.getName());
