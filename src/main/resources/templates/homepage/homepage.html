@@ -31,6 +31,7 @@
                     <div class="card-body">
                         <h5 class="card-title" th:text="${post.title}"></h5>
                         <p class="card-text" th:text=" 'Likes: ' + ${post.likeCount}"></p>
+                        <a class="stretched-link" th:href="@{/post/{id}(id=${post.id})}"></a>
                     </div>
                 </div>
             </div>
