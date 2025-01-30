@@ -30,4 +30,6 @@ public interface DtoMapper {
 
 
     void updateUserFromRequest(UserEditRequest userEditRequest, @MappingTarget User user);
+
+    Comment CommentCreateRequestToComment(CommentCreateRequest commentCreateRequest);
 }
