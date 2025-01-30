@@ -37,7 +37,7 @@ public class UserService {
         return responseMessage;
     }
 
-    public Optional<User> findByEmail(String email) {
+    protected Optional<User> findByEmail(String email) {
         return userRepository.findByEmail(email);
     }
 
