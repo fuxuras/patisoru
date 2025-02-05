@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Post</title>
     <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/bootstrap-icons.min.css}">
 </head>
 <body class="bg-light">
 <th:block th:replace="~{common/navbar :: navbar}"></th:block>
@@ -20,6 +21,12 @@
         <div class="col card-body">
             <h2 th:text="${post.title}" class="card-title text-primary"></h2>
             <p th:text="${post.text}" class="card-text"></p>
+        </div>
+
+        <div class="card-footer d-flex justify-content-end align-items-center">
+            <a th:onclick="handleLike('like')" class="btn btn-outline-success" role="button" data-bs-toggle="button" id="like-button"><i class="bi bi-hand-thumbs-up-fill"></i> </a>
+            <span id="like-count" class="p-2" th:text="${post.likeCount}"></span>
+            <a th:onclick="handleLike('dislike')" class="btn btn-outline-danger" role="button" data-bs-toggle="button" id="dislike-button"><i class="bi bi-hand-thumbs-down-fill"></i> </a>
         </div>
     </div>
 
@@ -52,5 +59,76 @@
 <th:block th:replace="~{common/footer :: footer}"></th:block>
 
 <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+
+<script th:inline="javascript">
+    const postId = /*[[${post.id}]]*/ '';
+    let status = "";
+    const likeCountElement = document.getElementById("like-count");
+    let likeCount = parseInt(likeCountElement.innerText,10);
+    const likeButton = document.getElementById("like-button");
+    const dislikeButton = document.getElementById("dislike-button");
+    const csrfToken = document.querySelector("input[name='_csrf']").value;
+
+    // Fetch user's like status on page load
+    window.onload = function () {
+        fetch(`/likes/status?postId=${postId}`, {
+            method: "GET",
+            headers: {"Content-Type": "application/json","X-CSRF-TOKEN": csrfToken}
+        })
+            .then(response => response.json())
+            .then(data => {
+                status = data.status;
+                updateButtonStyles(); // Set initial button styles
+            })
+            .catch(error => console.error("Error fetching status:", error));
+    };
+
+    function handleLike(action) {
+        if (status === action) {
+            action = "remove";
+        }
+        if (action === "like") {
+            likeCount++;
+        } else if (action === "dislike") {
+            likeCount--;
+        } else if (action === "remove") {
+            // Remove like or dislike
+            if (status === "like") {
+                likeCount--;
+            } else if (status === "dislike") {
+                likeCount++;
+
+            }
+        }
+        status = action
+        fetch(`/likes/${action}?postId=${postId}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json" ,
+                "X-CSRF-TOKEN": csrfToken
+            }
+        }).catch(error => console.error("Error posting like: ", error));
+
+        updateButtonStyles()
+    }
+
+    function updateButtonStyles() {
+        // Reset button styles
+        likeButton.classList.remove("btn-success", "active");
+        dislikeButton.classList.remove("btn-danger", "active");
+        likeButton.classList.add("btn-outline-success");
+        dislikeButton.classList.add("btn-outline-danger");
+        likeCountElement.innerText = likeCount
+
+        if (status === "like") {
+            likeButton.classList.add("btn-success", "active");
+            likeButton.classList.remove("btn-outline-success");
+        } else if (status === "dislike") {
+            dislikeButton.classList.add("btn-danger", "active");
+            dislikeButton.classList.remove("btn-outline-danger");
+        }
+    }
+</script>
+
 </body>
 </html>
