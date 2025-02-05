@@ -38,23 +38,22 @@
         </div>
 
         <script th:inline="javascript">
-            document.addEventListener('DOMContentLoaded', function() {
+            document.addEventListener('DOMContentLoaded', function () {
                 const currentPath = window.location.pathname;
                 const navLinks = document.querySelectorAll('.nav-link');
 
                 navLinks.forEach(link => {
-                    // Get the href attribute and convert it to a path
                     const href = link.getAttribute('href');
-                    // Handle both direct paths and Thymeleaf URLs
+                    if (!href) return; // Skip if href is null
+
+                    // Convert href to path
                     const linkPath = href.startsWith('http') ? new URL(href).pathname : href;
 
-                    // Remove any trailing slashes for comparison
+                    // Remove trailing slashes for comparison
                     if (linkPath === currentPath ||
                         (currentPath === '/' && linkPath === '/') ||
                         (linkPath !== '/' && currentPath.startsWith(linkPath))) {
-                        // Remove active class from all links first
                         navLinks.forEach(l => l.classList.remove('active'));
-                        // Add active class to the current link
                         link.classList.add('active');
                     }
                 });
