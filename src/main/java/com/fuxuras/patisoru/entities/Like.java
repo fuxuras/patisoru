@@ -32,7 +32,7 @@ public class Like {
     * This attribute false if it is dislike
     * true if it is like
      */
-    private boolean isLike;
+    private Boolean isLike;
 
 
 }
