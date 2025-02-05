@@ -55,4 +55,8 @@ public class PostService {
     protected Optional<Post> findPostById(UUID id) {
         return postRepository.findById(id);
     }
+
+    protected void save(Post post) {
+        postRepository.save(post);
+    }
 }

@@ -20,4 +20,5 @@ public class PostResponse {
     private String text;
     private UserInPostResponse user;
     private List<CommentInPostResponse> comments;
+    private long likeCount;
 }
