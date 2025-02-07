@@ -19,7 +19,7 @@ public class HomePageController {
     public String homepage(Model model) {
         List<FeaturedPost> featuredPosts = postService.getFeaturedPosts();
         model.addAttribute("featuredPosts", featuredPosts);
-        return "/homepage/homepage";
+        return "homepage/homepage";
     }
 
     //TODO: feature: create feed/discover page

@@ -27,12 +27,12 @@ public class AuthController {
             request.getSession().removeAttribute("message");
             model.addAttribute("message", responseMessage);
         }
-        return "/auth/login";
+        return "auth/login";
     }
 
     @GetMapping("/register")
     public String register() {
-        return "/auth/register";
+        return "auth/register";
     }
 
     @PostMapping("/register")

@@ -1,14 +1,23 @@
-# Use a base image with Java 17 (or higher)
-FROM openjdk:23-jdk-slim
-
-# Set the working directory inside the container
+# Build stage
+FROM maven:3.9-amazoncorretto-23 AS build
 WORKDIR /app
 
-# Copy the packaged Spring Boot application JAR file into the container
-COPY target/*.jar app.jar
+# Copy pom.xml first for better caching
+COPY pom.xml .
+COPY src ./src
 
-# Expose the port your Spring Boot application runs on (typically 8080)
+# Build and verify templates are included
+RUN mvn clean package -DskipTests
+RUN jar tf target/*.jar | grep "templates/auth/login.html"
+
+# Run stage
+FROM amazoncorretto:23-al2023-jdk
+
+WORKDIR /app
+
+# Copy the built artifact from build stage
+COPY --from=build /app/target/*.jar app.jar
+
 EXPOSE 8080
 
-# Define the command to run the application
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-jar", "/app/app.jar"]

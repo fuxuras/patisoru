@@ -24,12 +24,12 @@ public class PostController {
     public String post(@PathVariable UUID id, Model model) {
         PostResponse post = postService.getPostById(id);
         model.addAttribute("post", post);
-        return "/posts/single-post";
+        return "posts/single-post";
     }
 
     @GetMapping("/create")
     public String create() {
-        return "/posts/post-form";
+        return "posts/post-form";
     }
 
     @PostMapping("/create")
