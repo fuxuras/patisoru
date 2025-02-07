@@ -18,6 +18,10 @@ public class LikeService {
     private final LikeRepository likeRepository;
     private final PostService postService;
 
+    /*
+     * These like dislike and remove functions are completely bullshit
+     * TODO: refactor: like, dislike, remove and saveLike
+     */
     public void like(UUID postId, String email) {
         saveLike(postId,email,true);
     }

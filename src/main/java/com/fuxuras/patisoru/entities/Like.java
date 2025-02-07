@@ -34,5 +34,4 @@ public class Like {
      */
     private Boolean isLike;
 
-
 }

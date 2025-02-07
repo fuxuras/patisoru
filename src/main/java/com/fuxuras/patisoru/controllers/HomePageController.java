@@ -21,4 +21,6 @@ public class HomePageController {
         model.addAttribute("featuredPosts", featuredPosts);
         return "/homepage/homepage";
     }
+
+    //TODO: feature: create feed/discover page
 }

@@ -19,6 +19,7 @@ import java.security.Principal;
 @RequiredArgsConstructor
 @RequestMapping("/profile")
 public class ProfileController {
+
     private final UserService userService;
 
     @GetMapping
