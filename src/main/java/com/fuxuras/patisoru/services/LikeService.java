@@ -53,9 +53,8 @@ public class LikeService {
 
     private void updateLikeCount(UUID postId) {
         Post post = postService.findPostById(postId).orElseThrow(() -> new RuntimeException("Post not found"));
-        long likes = likeRepository.countLikesByPostId(postId);
-        long dislikes = likeRepository.countDislikesByPostId(postId);
-        post.setLikeCount(likes-dislikes);
+        long likeCount =likeRepository.getLikeDislikeDifferenceByPostId(postId);
+        post.setLikeCount(likeCount);
         postService.save(post);
     }
 
