@@ -34,12 +34,16 @@ public class LikeService {
         User user = userService.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
         Post post = postService.findPostById(postId).orElseThrow(() -> new RuntimeException("Post not found"));
         LikeId likeId = new LikeId(postId,user.getId());
-        Like like = new Like();
-        like.setId(likeId);
-        like.setIsLike(isLike);
-        like.setUser(user);
-        like.setPost(post);
-        likeRepository.save(like);
+        if (isLike == null) {
+            likeRepository.deleteById(likeId);
+        }else{
+            Like like = new Like();
+            like.setId(likeId);
+            like.setIsLike(isLike);
+            like.setUser(user);
+            like.setPost(post);
+            likeRepository.save(like);
+        }
         updateLikeCount(postId);
     }
 
