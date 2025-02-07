@@ -1,0 +1,51 @@
+version: "3.8"
+services:
+  patisoru:
+    build: .
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+      - prometheus # ensure prometheus is running before app
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/patisoru
+      MANAGEMENT_ENDPOINT_HEALTH_SHOW_DETAILS: always
+      MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE: "*" #Enable actuator endpoints
+      MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED: true #Enable prometheus
+      MANAGEMENT_SERVER_PORT: 8080 # Spring Boot 2.x requires this line, earlier versions might not
+
+  postgres:
+    image: postgres:15
+    ports:
+      - "5432:5432"  # Remove or comment this line for better isolation
+    environment:
+      POSTGRES_USER: patisoru
+      POSTGRES_PASSWORD: "1234" #CHANGE FOR PRODUCTION
+      POSTGRES_DB: patisoru
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    depends_on:
+      - patisoru # Make sure application is running first
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
+    depends_on:
+      - prometheus
+    environment:
+      GF_SECURITY_ADMIN_USER: admin #CHANGE FOR PRODUCTION
+      GF_SECURITY_ADMIN_PASSWORD: password #CHANGE FOR PRODUCTION
+    volumes:
+      - grafana_data:/var/lib/grafana
+
+volumes:
+  postgres_data:
+  grafana_data:
