@@ -1,5 +1,5 @@
 # Build stage
-FROM maven:3.9-amazoncorretto-23 AS build
+FROM eclipse-temurin:23-jdk-noble AS build
 WORKDIR /app
 
 # Copy pom.xml first for better caching
@@ -11,7 +11,7 @@ RUN mvn clean package -DskipTests
 RUN jar tf target/*.jar | grep "templates/auth/login.html"
 
 # Run stage
-FROM amazoncorretto:23-al2023-jdk
+FROM eclipse-temurin:23-jre-noble
 
 WORKDIR /app
 
