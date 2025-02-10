@@ -11,7 +11,7 @@ RUN mvn clean package -DskipTests
 RUN jar tf target/*.jar | grep "templates/auth/login.html"
 
 # Run stage
-FROM eclipse-temurin:23-jre-noble
+FROM eclipse-temurin:23-jre-alpine
 
 WORKDIR /app
 
