@@ -15,6 +15,8 @@ services:
       MANAGEMENT_ENDPOINT_HEALTH_SHOW_DETAILS: always
       MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED: true
       MANAGEMENT_SERVER_PORT: 8080
+    networks:  # Add network
+      - my_network
 
   postgres:
     image: postgres:latest
@@ -26,11 +28,8 @@ services:
       POSTGRES_DB: springboot_db
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U springuser -d springboot_db"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+    networks:  # Add network
+      - my_network
 
   prometheus:
     image: prom/prometheus:latest
@@ -44,11 +43,8 @@ services:
       - '--storage.tsdb.path=/prometheus'
       - '--web.console.libraries=/usr/share/prometheus/console_libraries'
       - '--web.console.templates=/usr/share/prometheus/consoles'
-    healthcheck:
-      test: ["CMD", "wget", "-q", "--spider", "http://localhost:9090/-/healthy"]
-      interval: 10s
-      timeout: 5s
-      retries: 3
+    networks:  # Add network
+      - my_network
 
   grafana:
     image: grafana/grafana:latest
@@ -62,13 +58,14 @@ services:
       GF_INSTALL_PLUGINS: "grafana-clock-panel,grafana-simple-json-datasource"
     volumes:
       - grafana_data:/var/lib/grafana
-    healthcheck:
-      test: ["CMD", "wget", "-q", "--spider", "http://localhost:3000/api/health"]
-      interval: 10s
-      timeout: 5s
-      retries: 3
+    networks:  # Add network
+      - my_network
 
 volumes:
   postgres_data:
   prometheus_data:
   grafana_data:
+
+networks:  # Define the network
+  my_network:
+    driver: bridge
