@@ -1,5 +1,5 @@
 # Build stage
-FROM eclipse-temurin:23-jdk-noble AS build
+FROM maven:3.9.9-eclipse-temurin-23-alpine AS build
 WORKDIR /app
 
 # Copy pom.xml first for better caching
