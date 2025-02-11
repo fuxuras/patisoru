@@ -7,6 +7,7 @@ services:
     depends_on:
       - postgres
       - prometheus
+      - redis  # Add Redis as a dependency
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/springboot_db
       SPRING_DATASOURCE_USERNAME: springuser
@@ -15,7 +16,9 @@ services:
       MANAGEMENT_ENDPOINT_HEALTH_SHOW_DETAILS: always
       MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED: true
       MANAGEMENT_SERVER_PORT: 8080
-    networks:  # Add network
+      SPRING_REDIS_HOST: redis  # Use the service name as the hostname
+      SPRING_REDIS_PORT: 6379
+    networks:
       - my_network
 
   postgres:
@@ -28,7 +31,7 @@ services:
       POSTGRES_DB: springboot_db
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    networks:  # Add network
+    networks:
       - my_network
 
   prometheus:
@@ -43,7 +46,7 @@ services:
       - '--storage.tsdb.path=/prometheus'
       - '--web.console.libraries=/usr/share/prometheus/console_libraries'
       - '--web.console.templates=/usr/share/prometheus/consoles'
-    networks:  # Add network
+    networks:
       - my_network
 
   grafana:
@@ -58,14 +61,25 @@ services:
       GF_INSTALL_PLUGINS: "grafana-clock-panel,grafana-simple-json-datasource"
     volumes:
       - grafana_data:/var/lib/grafana
-    networks:  # Add network
+    networks:
       - my_network
+
+  redis:  # Add the Redis service
+    image: redis:latest  # Use the latest stable Redis image
+    ports:
+      - "6379:6379"  # Expose the default Redis port
+    volumes:
+      - redis_data:/data  # Persist Redis data (IMPORTANT)
+    networks:
+      - my_network
+    # command: redis-server --requirepass yourpassword  (Optional: Set a password)
 
 volumes:
   postgres_data:
   prometheus_data:
   grafana_data:
+  redis_data:  # Add volume for Redis data
 
-networks:  # Define the network
+networks:
   my_network:
     driver: bridge
