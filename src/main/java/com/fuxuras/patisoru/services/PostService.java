@@ -9,6 +9,7 @@ import com.fuxuras.patisoru.entities.Post;
 import com.fuxuras.patisoru.entities.User;
 import com.fuxuras.patisoru.repositories.PostRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -32,6 +33,7 @@ public class PostService {
         return postResponse;
     }
 
+    @Cacheable(value = "featured_post")
     public List<FeaturedPost> getFeaturedPosts(){
         List<Post> posts = postRepository.findTop5ByCreatedAtAfterOrderByLikeCountDesc(LocalDateTime.now().minusMonths(1));
         List<FeaturedPost> featuredPosts = posts.stream()
