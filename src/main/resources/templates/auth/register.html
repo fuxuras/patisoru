@@ -18,18 +18,21 @@
 
             <th:block th:replace="common/message :: message"></th:block>
 
-            <form th:action="@{/register}"  method="POST">
+            <form th:action="@{/register}"  th:method="post" th:object="${registerRequest}">
                 <div class="mb-3">
                     <label for="fullName" class="form-label">Tam İsim</label>
-                    <input type="text" class="form-control" id="fullName" name="fullName" th:required="required">
+                    <input type="text" class="form-control" id="fullName" name="fullName" th:field="*{fullName}" required>
+                    <div class="text-danger" th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}"></div>
                 </div>
                 <div class="mb-3">
                     <label for="email" class="form-label">Email</label>
-                    <input type="text" class="form-control" id="email" name="email" th:required="required">
+                    <input type="text" class="form-control" id="email" name="email" th:field="*{email}" required>
+                    <div class="text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
                 </div>
                 <div class="mb-3">
                     <label for="password" class="form-label">Şifre</label>
-                    <input type="password" class="form-control" id="password" name="password" th:min="8" th:required="required">
+                    <input type="password" class="form-control" id="password" name="password" th:field="*{password}" required minlength="8">
+                    <div class="text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
                 </div>
 
                 <div class="d-flex justify-content-between">
