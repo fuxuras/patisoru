@@ -5,9 +5,12 @@ services:
     ports:
       - "8080:8080"
     depends_on:
-      - postgres
-      - prometheus
-      - redis  # Add Redis as a dependency
+      postgres:
+        condition: service_started
+      prometheus:
+        condition: service_started
+      redis:
+        condition: service_healthy
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/springboot_db
       SPRING_DATASOURCE_USERNAME: springuser
@@ -16,10 +19,17 @@ services:
       MANAGEMENT_ENDPOINT_HEALTH_SHOW_DETAILS: always
       MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED: true
       MANAGEMENT_SERVER_PORT: 8080
-      SPRING_REDIS_HOST: redis  # Use the service name as the hostname
+      SPRING_REDIS_HOST: redis
       SPRING_REDIS_PORT: 6379
+      SPRING_REDIS_PASSWORD: ${REDIS_PASSWORD}
     networks:
       - my_network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
 
   postgres:
     image: postgres:latest
@@ -33,6 +43,12 @@ services:
       - postgres_data:/var/lib/postgresql/data
     networks:
       - my_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
 
   prometheus:
     image: prom/prometheus:latest
@@ -54,7 +70,8 @@ services:
     ports:
       - "3000:3000"
     depends_on:
-      - prometheus
+      prometheus:
+        condition: service_started
     environment:
       GF_SECURITY_ADMIN_USER: admin
       GF_SECURITY_ADMIN_PASSWORD: admin123
@@ -64,21 +81,38 @@ services:
     networks:
       - my_network
 
-  redis:  # Add the Redis service
-    image: redis:latest  # Use the latest stable Redis image
+  redis:
+    image: redis:7.0
     ports:
-      - "6379:6379"  # Expose the default Redis port
+      - "6379:6379"
     volumes:
-      - redis_data:/data  # Persist Redis data (IMPORTANT)
+      - redis_data:/data
+      - ./redis.conf:/usr/local/etc/redis/redis.conf
     networks:
       - my_network
-    # command: redis-server --requirepass yourpassword  (Optional: Set a password)
+    environment:
+      - REDIS_PASSWORD=123
+    command: redis-server /usr/local/etc/redis/redis.conf
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD}", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+    deploy:
+      resources:
+        limits:
+          cpus: '0.2'
+          memory: 256M
+        reservations:
+          cpus: '0.1'
+          memory: 128M
 
 volumes:
   postgres_data:
   prometheus_data:
   grafana_data:
-  redis_data:  # Add volume for Redis data
+  redis_data:
 
 networks:
   my_network:
