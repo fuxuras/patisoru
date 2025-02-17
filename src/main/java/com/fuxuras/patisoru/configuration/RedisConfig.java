@@ -20,16 +20,12 @@ import java.time.Duration;
 public class RedisConfig {
 
     @Bean
-    @Primary
-    public CacheManager cacheManager(RedisConnectionFactory connectionFactory) {
-        RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig()
-                .entryTtl(Duration.ofMinutes(10)) // Or configure via properties
+    public RedisCacheConfiguration cacheConfiguration() {
+        return RedisCacheConfiguration
+                .defaultCacheConfig()
+                .entryTtl(Duration.ofMinutes(10))
                 .disableCachingNullValues()
-                .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer()))
-                .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer()));
-
-        return RedisCacheManager.builder(connectionFactory)
-                .cacheDefaults(config)
-                .build();
+                .serializeValuesWith( RedisSerializationContext.SerializationPair
+                        .fromSerializer(new GenericJackson2JsonRedisSerializer()));
     }
 }

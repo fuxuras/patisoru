@@ -94,14 +94,6 @@ services:
       timeout: 5s
       retries: 3
       start_period: 5s
-    deploy:
-      resources:
-        limits:
-          cpus: '0.2'
-          memory: 256M
-        reservations:
-          cpus: '0.1'
-          memory: 128M
 
 volumes:
   postgres_data:
