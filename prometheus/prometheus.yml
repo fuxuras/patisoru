@@ -12,3 +12,11 @@ scrape_configs:
     scrape_interval: 5s
     static_configs:
       - targets: ['springboot-app:8080'] #Scrape Springboot Application
+
+  - job_name: 'nginx'
+    static_configs:
+      - targets: ['localhost:443/vts_status']
+    metrics_path: /vts_status
+    scheme: https
+    tls_config:
+      insecure_skip_verify: true
