@@ -15,7 +15,7 @@ scrape_configs:
 
   - job_name: 'nginx'
     static_configs:
-      - targets: ['localhost:443']
+      - targets: ['192.168.1.171:443']
     metrics_path: /vts_status
     scheme: https
     tls_config:
