@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="tr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Keşfet - PatiSoru</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+</head>
+<body>
+<th:block th:replace="~{common/navbar :: navbar}"></th:block>
+
+<div class="bg-light py-5">
+    <div class="container">
+        <div class="row mb-4">
+            <div class="col-md-8">
+                <h1 class="display-5 text-primary">Keşfet</h1>
+                <p class="lead">Topluluk tarafından paylaşılan sorular ve cevaplar</p>
+            </div>
+            <div class="col-md-4">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">Sıralama ve Filtreleme</h5>
+                        <form th:action="@{/discover}" method="get" class="mt-3">
+                            <div class="mb-3">
+                                <label for="sortBy" class="form-label">Sırala:</label>
+                                <select id="sortBy" name="sortBy" class="form-select">
+                                    <option value="createdAt" th:selected="${sortBy == 'createdAt'}">Oluşturma Tarihi</option>
+                                    <option value="likeCount" th:selected="${sortBy == 'likeCount'}">Beğeni Sayısı</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="direction" class="form-label">Yön:</label>
+                                <select id="direction" name="direction" class="form-select">
+                                    <option value="desc" th:selected="${direction == 'desc'}">Azalan</option>
+                                    <option value="asc" th:selected="${direction == 'asc'}">Artan</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">Uygula</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row row-cols-1 row-cols-md-2 g-4">
+            <div class="col" th:each="post : ${posts}">
+                <div class="shadow card h-100">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <span th:text="${post.user.fullName}"></span>
+                        <small class="text-muted" th:text="${post.createdAt}"></small>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${post.title}"></h5>
+                        <p class="card-text text-truncate" th:text="${post.text}"></p>
+                        <div class="d-flex justify-content-between align-items-center mt-2">
+                            <span class="badge bg-primary rounded-pill" th:text="'Beğeni: ' + ${post.likeCount}"></span>
+                            <span class="badge bg-secondary rounded-pill" th:text="'Yorum: ' + ${post.comments.size()}"></span>
+                        </div>
+                        <a class="btn btn-sm btn-outline-primary mt-2" th:href="@{/post/{id}(id=${post.id})}">Detaylar</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pagination -->
+        <nav aria-label="Page navigation" class="mt-4" th:if="${totalPages > 1}">
+            <ul class="pagination justify-content-center">
+                <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                    <a class="page-link" th:href="@{/discover(page=0, size=10, sortBy=${sortBy}, direction=${direction})}" aria-label="First">
+                        <span aria-hidden="true">&laquo;&laquo;</span>
+                    </a>
+                </li>
+                <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                    <a class="page-link" th:href="@{/discover(page=${currentPage - 1}, size=10, sortBy=${sortBy}, direction=${direction})}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}" 
+                    th:classappend="${currentPage == i} ? 'active'">
+                    <a class="page-link" th:href="@{/discover(page=${i}, size=10, sortBy=${sortBy}, direction=${direction})}" th:text="${i + 1}"></a>
+                </li>
+                <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+                    <a class="page-link" th:href="@{/discover(page=${currentPage + 1}, size=10, sortBy=${sortBy}, direction=${direction})}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+                <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+                    <a class="page-link" th:href="@{/discover(page=${totalPages - 1}, size=10, sortBy=${sortBy}, direction=${direction})}" aria-label="Last">
+                        <span aria-hidden="true">&raquo;&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- No posts message -->
+        <div class="alert alert-info mt-4" th:if="${posts.empty}">
+            <p class="mb-0 text-center">Henüz hiç gönderi bulunmuyor. İlk gönderinizi siz oluşturun!</p>
+        </div>
+    </div>
+</div>
+
+<th:block th:replace="~{common/footer :: footer}"></th:block>
+
+<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+</body>
+</html> 

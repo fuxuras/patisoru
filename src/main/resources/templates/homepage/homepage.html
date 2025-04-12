@@ -27,11 +27,17 @@
         <div class="row row-cols-2 row-cols-md-5 g-4">
             <div class="col" th:each="post : ${featuredPosts}">
                 <div class="shadow card h-100">
-                    <div class="card-header" th:text="${post.user.fullName}"></div>
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <span th:text="${post.user.fullName}"></span>
+                        <small class="text-muted" th:text="${post.createdAt}"></small>
+                    </div>
                     <div class="card-body">
                         <h5 class="card-title" th:text="${post.title}"></h5>
-                        <p class="card-text" th:text=" 'Likes: ' + ${post.likeCount}"></p>
-                        <a class="stretched-link" th:href="@{/post/{id}(id=${post.id})}"></a>
+                        <p class="card-text text-truncate" th:text="${post.text}"></p>
+                        <div class="d-flex justify-content-between align-items-center mt-2">
+                            <span class="badge bg-primary rounded-pill" th:text="'Beğeni: ' + ${post.likeCount}"></span>
+                        </div>
+                        <a class="btn btn-sm btn-outline-primary mt-2 stretched-link" th:href="@{/post/{id}(id=${post.id})}">Detaylar</a>
                     </div>
                 </div>
             </div>

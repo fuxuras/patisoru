@@ -10,6 +10,8 @@ import com.fuxuras.patisoru.entities.User;
 import com.fuxuras.patisoru.repositories.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -40,6 +42,11 @@ public class PostService {
                 .map(mapper::postToFeaturedPost)
                 .collect(Collectors.toList());
         return featuredPosts;
+    }
+    
+    public Page<PostResponse> getAllPosts(Pageable pageable) {
+        Page<Post> posts = postRepository.findAll(pageable);
+        return posts.map(mapper::postToPostResponse);
     }
 
     public ResponseMessage create(PostCreateRequest postCreateRequest, String name) {

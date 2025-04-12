@@ -20,8 +20,8 @@ public class Security {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/register/**", "/css/**", "/js/**", "/images/**","/actuator/**").permitAll()
-                        .anyRequest().authenticated())
+                        .requestMatchers("/profile/**","/post/create", "/comment/create", "/likes/**").authenticated()
+                        .anyRequest().permitAll())
                 .formLogin(form -> form
                         .loginPage("/login")
                         .defaultSuccessUrl("/", true)
