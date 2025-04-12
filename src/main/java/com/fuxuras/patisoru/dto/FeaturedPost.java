@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Getter
@@ -15,6 +16,8 @@ import java.util.UUID;
 public class FeaturedPost implements Serializable {
     private UUID id;
     private String title;
+    private String text;
     private Long likeCount;
     private UserInFeaturedPost user;
+   private LocalDateTime createdAt;
 }

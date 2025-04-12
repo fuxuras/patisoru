@@ -1,5 +1,8 @@
 package com.fuxuras.patisoru.configuration;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,27 +21,31 @@ import java.time.Duration;
 @Configuration
 public class RedisConfig {
 
-
-
-
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
-
-        RedisStandaloneConfiguration redisConfiguration =
-                new RedisStandaloneConfiguration();
-
+        RedisStandaloneConfiguration redisConfiguration = new RedisStandaloneConfiguration();
         redisConfiguration.setHostName("redis");
         redisConfiguration.setPort(6379);
         return new LettuceConnectionFactory(redisConfiguration);
-
     }
 
     @Bean
-    public RedisCacheManager cacheManager(RedisConnectionFactory connectionFactory) {
+    public ObjectMapper objectMapper() {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule()); // Enable Java 8 date/time support
+        mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS); // Use ISO-8601 strings instead of timestamps
+        return mapper;
+    }
+
+    @Bean
+    public RedisCacheManager cacheManager(RedisConnectionFactory connectionFactory, ObjectMapper objectMapper) {
+        // Configure the serializer with the custom ObjectMapper
+        GenericJackson2JsonRedisSerializer serializer = new GenericJackson2JsonRedisSerializer(objectMapper);
+
         RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig()
                 .entryTtl(Duration.ofMinutes(60)) // Set a default TTL (Time-To-Live) - adjust as needed
                 .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer())) // Serialize keys as Strings
-                .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer())) // Serialize values as JSON
+                .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(serializer)) // Use custom serializer for values
                 .disableCachingNullValues(); // Don't cache null values
 
         return RedisCacheManager.builder(connectionFactory)

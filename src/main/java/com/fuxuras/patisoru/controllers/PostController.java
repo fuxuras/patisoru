@@ -4,9 +4,11 @@ import com.fuxuras.patisoru.dto.PostCreateRequest;
 import com.fuxuras.patisoru.dto.PostResponse;
 import com.fuxuras.patisoru.dto.ResponseMessage;
 import com.fuxuras.patisoru.services.PostService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -28,12 +30,16 @@ public class PostController {
     }
 
     @GetMapping("/create")
-    public String create() {
+    public String create(Model model) {
+        model.addAttribute("post", new PostCreateRequest());
         return "posts/post-form";
     }
 
     @PostMapping("/create")
-    public String create(@ModelAttribute PostCreateRequest post, Principal principal, RedirectAttributes redirectAttributes){
+    public String create(@Valid @ModelAttribute PostCreateRequest post, BindingResult bindingResult, Principal principal, RedirectAttributes redirectAttributes){
+        if (bindingResult.hasErrors()) {
+            return "posts/post-form";
+        }
         ResponseMessage message = postService.create(post, principal.getName());
         redirectAttributes.addFlashAttribute("message", message);
         if (message.getCode() > 0){
