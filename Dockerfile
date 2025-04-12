@@ -1,13 +1,24 @@
-# Build stage
-FROM maven:3.9.9-eclipse-temurin-23-alpine AS build
+# Build stage with Maven cache
+FROM maven:3.9-eclipse-temurin-23 AS build
 WORKDIR /app
 
-# Copy pom.xml first for better caching
+# Mount point for the Maven cache
+VOLUME /root/.m2
+
+# Copy POM first to cache dependencies
 COPY pom.xml .
+COPY .mvn .mvn
+COPY mvnw mvnw
+COPY mvnw.cmd mvnw.cmd
+
+# Download dependencies
+RUN mvn dependency:go-offline -B
+
+# Copy source code and build
 COPY src ./src
+RUN mvn clean package -DskipTests
 
 # Build and verify templates are included
-RUN mvn clean package -DskipTests
 RUN jar tf target/*.jar | grep "templates/auth/login.html"
 
 # Run stage
