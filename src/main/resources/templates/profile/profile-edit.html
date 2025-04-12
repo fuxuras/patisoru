@@ -16,14 +16,16 @@
 
             <th:block th:replace="common/message :: message"></th:block>
 
-            <form th:action="@{/profile/edit}"  method="POST">
+            <form th:action="@{/profile/edit}" method="POST" th:object="${user}">
                 <div class="mb-3">
                     <label for="fullName" class="form-label">Tam isim</label>
-                    <input type="text" class="form-control" id="fullName" name="fullName" th:value="${user.fullName}">
+                    <input type="text" class="form-control" id="fullName" name="fullName" th:value="*{fullName}">
+                    <div class="text-danger" th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}"></div>
                 </div>
                 <div class="mb-3">
                     <label for="email" class="form-label">Email</label>
-                    <input type="text" class="form-control" id="email" name="email" th:value="${user.email}">
+                    <input type="text" class="form-control" id="email" name="email" th:value="*{email}">
+                    <div class="text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
                 </div>
                 <div class="d-flex justify-content-between">
                     <button type="submit" class="btn btn-primary">Düzenle</button>
