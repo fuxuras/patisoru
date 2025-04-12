@@ -18,8 +18,11 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Post extends BaseEntity{
+    @Column(length = 64)
     private String title;
+    @Column(length = 512)
     private String text;
+
     private Long likeCount;
 
     @ManyToOne

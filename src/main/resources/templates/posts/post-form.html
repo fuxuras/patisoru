@@ -20,14 +20,16 @@
             <th:block th:replace="common/message :: message"></th:block>
 
 
-            <form th:action="@{/post/create}"  method="POST">
+            <form th:action="@{/post/create}"  method="POST" th:object="${post}">
                 <div class="mb-3">
                     <label for="title" class="form-label">Başlık</label>
-                    <textarea type="text" class="form-control" id="title" name="title"></textarea>
+                    <textarea type="text" class="form-control" id="title" name="title" required maxlength="64" th:field="*{title}"></textarea>
+                    <div class="text-danger" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></div>
                 </div>
                 <div class="mb-3">
                     <label for="text" class="form-label">Gönderi Metni</label>
-                    <textarea type="text" class="form-control" id="text" name="text"></textarea>
+                    <textarea type="text" class="form-control" id="text" name="text" required maxlength="512" th:field="*{text}"></textarea>
+                    <div class="text-danger" th:if="${#fields.hasErrors('text')}" th:errors="*{text}"></div>
                 </div>
                 <div class="d-flex justify-content-between">
                     <button type="submit" class="btn btn-primary">Paylaş</button>
