@@ -14,6 +14,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Comment extends BaseEntity {
+    @Column(length = 256)
     private String text;
 
     @ManyToOne
