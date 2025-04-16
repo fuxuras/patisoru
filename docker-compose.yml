@@ -51,36 +51,6 @@ services:
       retries: 5
       start_period: 10s
 
-  prometheus:
-    image: prom/prometheus:v3.1.0
-    ports:
-      - "9090:9090"
-    volumes:
-      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
-      - prometheus_data:/prometheus
-    command:
-      - '--config.file=/etc/prometheus/prometheus.yml'
-      - '--storage.tsdb.path=/prometheus'
-      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
-      - '--web.console.templates=/usr/share/prometheus/consoles'
-    networks:
-      - my_network
-
-  grafana:
-    image: grafana/grafana:11.5.0
-    ports:
-      - "3000:3000"
-    depends_on:
-      prometheus:
-        condition: service_started
-    environment:
-      GF_SECURITY_ADMIN_USER: admin
-      GF_SECURITY_ADMIN_PASSWORD: admin123
-      GF_INSTALL_PLUGINS: "grafana-clock-panel,grafana-simple-json-datasource"
-    volumes:
-      - grafana_data:/var/lib/grafana
-    networks:
-      - my_network
 
   redis:
     image: redis:7.4-alpine
@@ -99,8 +69,6 @@ services:
 
 volumes:
   postgres_data:
-  prometheus_data:
-  grafana_data:
   redis_data:
   maven_cache:
 
