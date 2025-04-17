@@ -23,7 +23,7 @@ public class UserService {
     public ResponseMessage createUser(RegisterRequest registerRequest) {
         if (userRepository.existsByEmail(registerRequest.getEmail())){
             ResponseMessage responseMessage = new ResponseMessage();
-            responseMessage.setMessage("Email başka bir kulannıcı tarafından kullanılıyor");
+            responseMessage.setMessage("Email başka bir kullanıcı tarafından kullanılıyor");
             responseMessage.setCode(-1);
             return responseMessage;
         }
