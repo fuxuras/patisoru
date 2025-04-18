@@ -21,14 +21,7 @@ public class AuthController {
     private final UserService userService;
 
     @GetMapping("/login")
-    public String login(HttpServletRequest request, Model model) {
-        // TODO: refactor: flash attribute when login redirect
-        // this is obviously not the best way but i cant find any other way
-        if(request.getSession().getAttribute("message") != null) {
-            ResponseMessage responseMessage = (ResponseMessage) request.getSession().getAttribute("message");
-            request.getSession().removeAttribute("message");
-            model.addAttribute("message", responseMessage);
-        }
+    public String login() {
         return "auth/login";
     }
 

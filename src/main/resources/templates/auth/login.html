@@ -14,7 +14,13 @@
             <div class="col-md-6 card p-4 m-auto shadow-lg">
                 <h1>Giriş Yap</h1>
 
-                <th:block th:replace="common/message :: message"></th:block>
+                <div th:if="${param.error != null || param.logout != null}">
+                    <div th:classappend="${param.logout} ? 'alert alert-success' : 'alert alert-danger'"
+                         class="alert"
+                         role="alert">
+                        <span th:text="${param.logout} ? 'Başarıyla çıkış yaptınız': 'Hatalı kullanıcı adı ya da şifre girdiniz' "></span>
+                    </div>
+                </div>
 
                 <form th:action="@{/login}"  method="POST">
                     <div class="mb-3">

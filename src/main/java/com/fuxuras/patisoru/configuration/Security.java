@@ -26,9 +26,11 @@ public class Security {
                         .loginPage("/login")
                         .defaultSuccessUrl("/", true)
                         .loginProcessingUrl("/login")
-                        .failureHandler(authenticationFailureHandler()) // Use custom handler
+                        .failureUrl("/login?error")
                         .permitAll())
-                .logout(logout -> logout.logoutUrl("/logout"));
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/login?logout"));
         return http.build();
     }
 
