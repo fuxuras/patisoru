@@ -13,7 +13,7 @@
 
     <th:block th:replace="common/message :: message"></th:block>
 
-    <div class="row card my-5 shadow">
+    <div class="row card my-5 shadow">xx
         <div class="col card-header">
             <p th:text="${post.user.fullName}"></p>
             <p th:text="${post.createdAt}"></p>
@@ -23,26 +23,18 @@
             <p th:text="${post.text}" class="card-text"></p>
         </div>
 
-        <!-- Like/Dislike buttons - only show for authenticated users -->
-        <div sec:authorize="isAuthenticated()" class="mt-3 mb-3">
-            <button id="likeButton" class="btn btn-outline-success">
-                <i class="bi bi-hand-thumbs-up"></i> Beğen
+        <div class="mt-3 mb-3">
+            <button id="like-button" class="btn btn-outline-success" onclick="handleLike('like')">
+                <i class="bi bi-hand-thumbs-up"></i>
             </button>
-            <button id="dislikeButton" class="btn btn-outline-danger">
-                <i class="bi bi-hand-thumbs-down"></i> Beğenme
+            <span id="like-count" th:text="${post.likeCount}"></span>
+            <button id="dislike-button" class="btn btn-outline-danger" onclick="handleLike('dislike')">
+                <i class="bi bi-hand-thumbs-down"></i>
             </button>
-            <button id="removeButton" class="btn btn-outline-secondary">
-                <i class="bi bi-x-circle"></i> Kaldır
-            </button>
-        </div>
-
-        <!-- Show login message for non-authenticated users -->
-        <div sec:authorize="!isAuthenticated()" class="alert alert-info mt-3">
-            <p class="mb-0">Gönderiyi beğenmek veya beğenmemek için <a th:href="@{/login}">giriş yapın</a>.</p>
         </div>
     </div>
 
-    <h3 class="h3 row">Yorumlar</h3>
+    <h3 class="h3 row" th:if="${post.getComments().size()>0}">Yorumlar</h3>
 
     <div th:each="comment : ${post.comments}" class="row card shadow my-3">
         <div class="col card-header">
@@ -54,8 +46,8 @@
         </div>
     </div>
 
-    <h3 class="h3 row"> Yorum Yap</h3>
-    <div class="row card shadow my-3">
+    <h3 class="h3 row" sec:authorize="isAuthenticated()"> Yorum Yap</h3>
+    <div class="row card shadow my-3" sec:authorize="isAuthenticated()">
         <form th:action="@{/post/{id}/comment/create(id=${post.id})}" method="post" class="card-body">
             <div class="mb-3">
                 <label for="text" class="form-label">Yorum</label>
@@ -73,19 +65,20 @@
 <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
 
 <script th:inline="javascript">
+    const csrfToken = /*[[${_csrf.token}]]*/ null;
+    const csrfHeaderName = /*[[${_csrf.headerName}]]*/ null;
     const postId = /*[[${post.id}]]*/ '';
     let status = "";
     const likeCountElement = document.getElementById("like-count");
     let likeCount = parseInt(likeCountElement.innerText,10);
     const likeButton = document.getElementById("like-button");
     const dislikeButton = document.getElementById("dislike-button");
-    const csrfToken = document.querySelector("input[name='_csrf']").value;
 
     // Fetch user's like status on page load
     window.onload = function () {
         fetch(`/likes/status?postId=${postId}`, {
             method: "GET",
-            headers: {"Content-Type": "application/json","X-CSRF-TOKEN": csrfToken}
+            headers: {"Content-Type": "application/json",[csrfHeaderName]: csrfToken}
         })
             .then(response => response.json())
             .then(data => {
@@ -126,7 +119,7 @@
             method: "POST",
             headers: {
                 "Content-Type": "application/json" ,
-                "X-CSRF-TOKEN": csrfToken
+                [csrfHeaderName]: csrfToken
             }
         }).catch(error => console.error("Error posting like: ", error));
 
