@@ -24,20 +24,52 @@
             </div>
         </div>
         <h3 class="h3 text-primary border-top py-5 ps-2 row">Öne Çıkan Paylaşımlar</h3>
-        <div class="row row-cols-2 row-cols-md-5 g-4">
-            <div class="col" th:each="post : ${featuredPosts}">
-                <div class="shadow card h-100">
-                    <div class="card-header d-flex justify-content-between align-items-center">
-                        <span th:text="${post.user.fullName}"></span>
-                        <small class="text-muted" th:text="${post.createdAt}"></small>
-                    </div>
-                    <div class="card-body">
-                        <h5 class="card-title" th:text="${post.title}"></h5>
-                        <p class="card-text text-truncate" th:text="${post.text}"></p>
-                        <div class="d-flex justify-content-between align-items-center mt-2">
-                            <span class="badge bg-primary rounded-pill" th:text="'Beğeni: ' + ${post.likeCount}"></span>
+
+        <div class="row ">
+            <div class="row row-cols-1 g-4" th:each="post : ${featuredPosts}">
+                <div class="mx-auto col col-md-9 col-lg-6 card border-0 h-100 shadow-sm">
+                    <div class="row pt-3">
+                        <div class="d-flex flex-column align-items-center me-3 text-center col col-1">
+                            <a href="#" title="Upvote" class="text-decoration-none text-muted d-block mb-1">
+                                <i class="bi bi-arrow-up fs-5"></i> <!-- Up arrow icon -->
+                            </a>
+                            <span class="fw-bold" th:text="${post.likeCount}">
+                                </span>
+                            <a href="#" title="Downvote" class="text-decoration-none text-muted d-block mt-1">
+                                <i class="bi bi-arrow-down fs-5"></i> <!-- Down arrow icon -->
+                            </a>
                         </div>
-                        <a class="btn btn-sm btn-outline-primary mt-2 stretched-link" th:href="@{/post/{id}(id=${post.id})}">Detaylar</a>
+
+                        <div class="col col-10">
+                            <div class="d-flex align-items-center mb-1">
+                                <h5 class="card-title mb-0 me-2">
+                                    <a th:href="@{/post/{id}(id=${post.id})}" class="text-dark text-decoration-none"
+                                       th:text="${post.title}">
+                                        Post Title
+                                    </a>
+                                </h5>
+                                <span class="badge bg-primary text-uppercase small">
+                                        QUESTION
+                                    </span>
+                            </div>
+
+                            <p class="mb-2 small text-secondary text-start" th:text="${post.text}">
+                                Post main content goes here. If it has newlines, they will be respected.
+                            </p>
+
+                            <div
+                                    class="d-flex justify-content-between align-items-center text-muted small border-top pt-3">
+                                <div class="d-flex align-items-center">
+                                    <img src="https://picsum.photos/200" alt="User Avatar"
+                                         class="rounded-circle me-2" width="24" height="24">
+                                    <span>Posted by
+                                            <a href="#" class="text-decoration-none fw-bold"
+                                               th:text="${post.user.fullName}">User Name</a>
+                                        </span>
+                                    <span class="ms-2" th:text="${post.createdAt}">Time ago</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
