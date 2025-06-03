@@ -24,6 +24,8 @@ public class User extends BaseEntity {
     private String password;
     private String fullName;
     private String role;
+    @Enumerated(EnumType.STRING)
+    private Status status;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @JsonManagedReference
