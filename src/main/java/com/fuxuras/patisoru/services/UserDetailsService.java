@@ -1,5 +1,6 @@
 package com.fuxuras.patisoru.services;
 
+import com.fuxuras.patisoru.entities.Status;
 import com.fuxuras.patisoru.entities.User;
 import com.fuxuras.patisoru.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -42,6 +43,11 @@ public class UserDetailsService implements org.springframework.security.core.use
             @Override
             public String getUsername() {
                 return user.getEmail();
+            }
+
+            @Override
+            public boolean isEnabled() {
+                return user.getStatus().equals(Status.ACTIVE);
             }
         };
 

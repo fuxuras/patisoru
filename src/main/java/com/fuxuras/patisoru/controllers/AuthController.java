@@ -1,17 +1,17 @@
 package com.fuxuras.patisoru.controllers;
 
+import com.fuxuras.patisoru.dto.EmailVerification;
 import com.fuxuras.patisoru.dto.RegisterRequest;
 import com.fuxuras.patisoru.dto.ResponseMessage;
 import com.fuxuras.patisoru.services.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.message.Message;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -43,5 +43,21 @@ public class AuthController {
         }else {
             return "redirect:/register";
         }
+    }
+
+    @GetMapping("/email-verification")
+    public String emailVerification(@RequestParam(value = "email", required = false) String email, @RequestParam(value = "code", required = false) String code, RedirectAttributes redirectAttributes) {
+        ResponseMessage message = new ResponseMessage();
+        if (code != null && !code.isEmpty() && email != null && !email.isEmpty()) {
+            EmailVerification emailVerification = new EmailVerification();
+            emailVerification.setEmail(email);
+            emailVerification.setToken(code);
+            message = userService.verifyUser(emailVerification);
+        }else {
+            message.setMessage("Email verification failed");
+            message.setCode(-1);
+        }
+        redirectAttributes.addFlashAttribute("message", message);
+        return "redirect:/login";
     }
 }
