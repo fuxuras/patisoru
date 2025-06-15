@@ -6,6 +6,8 @@
     <title>Post</title>
     <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
     <link rel="stylesheet" th:href="@{/css/bootstrap-icons.min.css}">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 </head>
 <body class="bg-light">
 <th:block th:replace="~{common/navbar :: navbar}"></th:block>
@@ -122,8 +124,8 @@
 <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
 
 <script th:inline="javascript">
-    const csrfToken = /*[[${_csrf.token}]]*/ null;
-    const csrfHeaderName = /*[[${_csrf.headerName}]]*/ null;
+    const csrfToken = document.querySelector("meta[name='_csrf']")?.getAttribute("content");
+    const csrfHeaderName = document.querySelector("meta[name='_csrf_header']")?.getAttribute("content");
     const postId = /*[[${post.id}]]*/ '';
     let status = "";
     const likeCountElement = document.getElementById("like-count");
