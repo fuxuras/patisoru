@@ -9,53 +9,110 @@
 </head>
 <body class="bg-light">
 <th:block th:replace="~{common/navbar :: navbar}"></th:block>
-<div class="container">
+<div class="container py-5">
 
     <th:block th:replace="common/message :: message"></th:block>
 
-    <div class="row card my-5 shadow">xx
-        <div class="col card-header">
-            <p th:text="${post.user.fullName}"></p>
-            <p th:text="${post.createdAt}"></p>
-        </div>
-        <div class="col card-body">
-            <h2 th:text="${post.title}" class="card-title text-primary"></h2>
-            <p th:text="${post.text}" class="card-text"></p>
-        </div>
 
-        <div class="mt-3 mb-3">
-            <button id="like-button" class="btn btn-outline-success" onclick="handleLike('like')">
-                <i class="bi bi-hand-thumbs-up"></i>
-            </button>
-            <span id="like-count" th:text="${post.likeCount}"></span>
-            <button id="dislike-button" class="btn btn-outline-danger" onclick="handleLike('dislike')">
-                <i class="bi bi-hand-thumbs-down"></i>
-            </button>
-        </div>
-    </div>
+    <div class="row">
+        <div class="row mx-auto row-cols-1 g-4">
+            <div class="mx-auto col col-md-12 col-lg-9 card border-0 h-100 shadow-sm">
+                <div class="row pt-3">
+                    <div class="d-flex flex-column align-items-center me-3 text-center col col-1">
+                        <a href="#" title="Upvote" class="text-decoration-none text-muted d-block mb-1">
+                            <i class="bi bi-arrow-up fs-5"></i> <!-- Up arrow icon -->
+                        </a>
+                        <span class="fw-bold" th:text="${post.likeCount}">
+                                </span>
+                        <a href="#" title="Downvote" class="text-decoration-none text-muted d-block mt-1">
+                            <i class="bi bi-arrow-down fs-5"></i> <!-- Down arrow icon -->
+                        </a>
+                    </div>
 
-    <h3 class="h3 row" th:if="${post.getComments().size()>0}">Yorumlar</h3>
+                    <div class="col col-10">
+                        <div class="d-flex align-items-center mb-1">
+                            <h5 class="card-title mb-0 me-2">
+                                <a class="text-dark text-decoration-none"
+                                   th:text="${post.title}">
+                                    Post Title
+                                </a>
+                            </h5>
+                            <span class="badge bg-primary text-uppercase small">
+                                        QUESTION
+                                    </span>
+                        </div>
 
-    <div th:each="comment : ${post.comments}" class="row card shadow my-3">
-        <div class="col card-header">
-            <p th:text="${comment.user.fullName}"></p>
-            <p th:text="${comment.createdAt}"></p>
-        </div>
-        <div class="col card-body">
-            <p th:text="${comment.text}" class="card-text"></p>
-        </div>
-    </div>
+                        <p class="mb-2 small text-secondary text-start" th:text="${post.text}">
+                            Post main content goes here. If it has newlines, they will be respected.
+                        </p>
 
-    <h3 class="h3 row" sec:authorize="isAuthenticated()"> Yorum Yap</h3>
-    <div class="row card shadow my-3" sec:authorize="isAuthenticated()">
-        <form th:action="@{/post/{id}/comment/create(id=${post.id})}" method="post" class="card-body">
-            <div class="mb-3">
-                <label for="text" class="form-label">Yorum</label>
-                <textarea name="text" id="text" class="form-control"></textarea>
+                        <div
+                                class="d-flex justify-content-between align-items-center text-muted small border-top pt-3">
+                            <div class="d-flex align-items-center">
+                                <img src="https://picsum.photos/200" alt="User Avatar"
+                                     class="rounded-circle me-2" width="24" height="24">
+                                <span>Posted by
+                                            <a href="#" class="text-decoration-none fw-bold"
+                                               th:text="${post.user.fullName}">Username</a>
+                                        </span>
+                                <span class="ms-2" th:text="${#temporals.format(post.createdAt, 'MMMM dd, yyyy hh:mm')}">Time ago</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <button type="submit" class="btn btn-primary">Gönder</button>
-        </form>
+        </div>
     </div>
+
+
+
+    <div class="row mt-4">
+        <div class="row row-cols-1 g-3 mx-auto" th:each="comment : ${post.comments}">
+            <div class=" col col-md-9 col-lg-6 card border-0 h-100 shadow-sm mx-auto">
+                <div class="row pt-3">
+
+
+                    <div class="col col-11 mx-auto">
+                        <div class="d-flex align-items-center mb-1">
+                            <!-- empty because title section-->
+                        </div>
+
+                        <p class="mb-2 small text-secondary" th:text="${comment.text}">
+                            Post main content goes here. If it has newlines, they will be respected.
+                        </p>
+
+                        <div
+                                class="d-flex justify-content-between align-items-center text-muted small border-top pt-3">
+                            <div class="d-flex align-items-center">
+                                <img src="https://picsum.photos/200" alt="User Avatar"
+                                     class="rounded-circle me-2" width="24" height="24">
+                                <span>Posted by
+                                            <a href="#" class="text-decoration-none fw-bold"
+                                               th:text="${comment.user.fullName}">Username</a>
+                                        </span>
+                                <span class="ms-2" th:text="${#temporals.format(comment.createdAt, 'MMMM dd, yyyy hh:mm')}">Time ago</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<div class="row">
+
+    <div class="row row-cols-1 g-4 mx-auto" sec:authorize="isAuthenticated()">
+        <div class="col col-md-9 col-lg-6 card border-0 h-100 shadow-sm mx-auto">
+            <form th:action="@{/post/{id}/comment/create(id=${post.id})}" method="post" class="card-body">
+                <div class="mb-3">
+                    <label for="text" class="form-label">Yorum</label>
+                    <textarea name="text" id="text" class="form-control"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Gönder</button>
+            </form>
+        </div>
+    </div>
+</div>
 
 
 

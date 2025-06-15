@@ -6,8 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Keşfet - PatiSoru</title>
     <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
+    <link rel="stylesheet" th:href="@{/css/bootstrap-icons.min.css}">
 </head>
 
 <body>
@@ -87,9 +86,9 @@
                                             class="rounded-circle me-2" width="24" height="24">
                                         <span>Posted by
                                             <a href="#" class="text-decoration-none fw-bold"
-                                                th:text="${post.user.fullName}">User Name</a>
+                                                th:text="${post.user.fullName}">Username</a>
                                         </span>
-                                        <span class="ms-2" th:text="${post.createdAt}">Time ago</span>
+                                        <span class="ms-2" th:text="${#temporals.format(post.createdAt, 'MMMM dd, yyyy hh:mm')}">Time ago</span>
                                     </div>
                                     <a th:href="@{/post/{id}(id=${post.id}, fragment='comments')}"
                                         class="d-flex align-items-center text-muted text-decoration-none"

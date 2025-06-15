@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pati Soru</title>
     <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/bootstrap-icons.min.css}">
 </head>
 <body>
 <th:block th:replace="~{common/navbar :: navbar}"></th:block>
@@ -64,9 +65,9 @@
                                          class="rounded-circle me-2" width="24" height="24">
                                     <span>Posted by
                                             <a href="#" class="text-decoration-none fw-bold"
-                                               th:text="${post.user.fullName}">User Name</a>
+                                               th:text="${post.user.fullName}">Username</a>
                                         </span>
-                                    <span class="ms-2" th:text="${post.createdAt}">Time ago</span>
+                                    <span class="ms-2" th:text="${#temporals.format(post.createdAt, 'MMMM dd, yyyy hh:mm')}">Time ago</span>
                                 </div>
                             </div>
                         </div>
