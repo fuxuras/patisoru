@@ -37,7 +37,7 @@ public class ProfileController {
         
         // Create UserEditRequest object
         UserEditRequest userEditRequest = new UserEditRequest();
-        userEditRequest.setEmail(userResponse.getEmail());
+//        userEditRequest.setEmail(userResponse.getEmail());
         userEditRequest.setFullName(userResponse.getFullName());
         
         model.addAttribute("user", userEditRequest);
