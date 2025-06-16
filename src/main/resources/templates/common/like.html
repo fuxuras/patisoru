@@ -7,7 +7,7 @@
 <body>
 
 <div th:fragment="like-buttons(post, userLikeStatus)"
-     class="like-component d-flex flex-column align-items-center me-3 text-center col col-1"
+     class="like-component d-flex flex-column align-items-center me-3 text-center col col-1 ms-2"
      th:attr="data-post-id=${post.id}, data-initial-status=${userLikeStatus}">
 
     <a href="#" title="Upvote" class="like-button text-decoration-none d-block mb-1"
@@ -27,7 +27,7 @@
 
 
 
-<script th:fragment="like-script">
+<script th:fragment="like-script" th:inline="javascript">
     document.addEventListener("DOMContentLoaded", function () {
         const isAuthenticated = /*[[${#authorization.expression('isAuthenticated()')}]]*/ false;
         const csrfToken = document.querySelector("meta[name='_csrf']")?.content;
