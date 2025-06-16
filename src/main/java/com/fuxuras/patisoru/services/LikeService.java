@@ -22,19 +22,19 @@ public class LikeService {
      * These like dislike and remove functions are completely bullshit
      * TODO: refactor: like, dislike, remove and saveLike
      */
-    public void like(UUID postId, String email) {
-        saveLike(postId,email,true);
+    public long like(UUID postId, String email) {
+        return saveLike(postId,email,true);
     }
 
-    public void dislike(UUID postId, String email) {
-        saveLike(postId,email,false);
+    public long dislike(UUID postId, String email) {
+        return saveLike(postId,email,false);
     }
 
-    public void remove(UUID postId, String email) {
-        saveLike(postId,email,null);
+    public long remove(UUID postId, String email) {
+        return saveLike(postId,email,null);
     }
 
-    private void saveLike(UUID postId,String email, Boolean isLike) {
+    private long saveLike(UUID postId,String email, Boolean isLike) {
         User user = userService.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
         Post post = postService.findPostById(postId).orElseThrow(() -> new RuntimeException("Post not found"));
         LikeId likeId = new LikeId(postId,user.getId());
@@ -48,14 +48,15 @@ public class LikeService {
             like.setPost(post);
             likeRepository.save(like);
         }
-        updateLikeCount(postId);
+        return updateLikeCount(postId);
     }
 
-    private void updateLikeCount(UUID postId) {
+    private long updateLikeCount(UUID postId) {
         Post post = postService.findPostById(postId).orElseThrow(() -> new RuntimeException("Post not found"));
         long likeCount =likeRepository.getLikeDislikeDifferenceByPostId(postId);
         post.setLikeCount(likeCount);
         postService.save(post);
+        return likeCount;
     }
 
     public String getStatus(UUID postId, String name) {

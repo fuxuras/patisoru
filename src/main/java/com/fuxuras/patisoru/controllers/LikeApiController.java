@@ -22,18 +22,18 @@ public class LikeApiController {
      * for informing user with ui
      */
     @PostMapping("/like")
-    public void like(@RequestParam UUID postId, Principal principal) {
-        likeService.like(postId,principal.getName());
+    public long like(@RequestParam UUID postId, Principal principal) {
+        return likeService.like(postId,principal.getName());
     }
 
     @PostMapping("/dislike")
-    public void dislike(@RequestParam UUID postId, Principal principal) {
-        likeService.dislike(postId,principal.getName());
+    public long dislike(@RequestParam UUID postId, Principal principal) {
+        return likeService.dislike(postId,principal.getName());
     }
 
     @PostMapping("/remove")
-    public void remove(@RequestParam UUID postId, Principal principal) {
-        likeService.remove(postId,principal.getName());
+    public long remove(@RequestParam UUID postId, Principal principal) {
+        return likeService.remove(postId,principal.getName());
     }
 
     // TODO: refactor: response entity shape

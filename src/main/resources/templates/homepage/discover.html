@@ -51,16 +51,16 @@
                 <div class="row row-cols-1 g-4 mx-auto" th:each="post : ${posts}">
                     <div class=" col col-md-9 col-lg-6 card border-0 h-100 shadow-sm mx-auto">
                         <div class="row pt-3">
-                            <div class="d-flex flex-column align-items-center me-3 text-center col col-1">
-                                <a href="#" title="Upvote" class="text-decoration-none text-muted d-block mb-1">
-                                    <i class="bi bi-arrow-up fs-5"></i> <!-- Up arrow icon -->
-                                </a>
-                                <span class="fw-bold" th:text="${post.likeCount}">
-                                </span>
-                                <a href="#" title="Downvote" class="text-decoration-none text-muted d-block mt-1">
-                                    <i class="bi bi-arrow-down fs-5"></i> <!-- Down arrow icon -->
-                                </a>
-                            </div>
+<!--                            <div class="d-flex flex-column align-items-center me-3 text-center col col-1">-->
+<!--                                <a href="#" title="Upvote" class="text-decoration-none text-muted d-block mb-1">-->
+<!--                                    <i class="bi bi-arrow-up fs-5"></i> &lt;!&ndash; Up arrow icon &ndash;&gt;-->
+<!--                                </a>-->
+<!--                                <span class="fw-bold" th:text="${post.likeCount}">-->
+<!--                                </span>-->
+<!--                                <a href="#" title="Downvote" class="text-decoration-none text-muted d-block mt-1">-->
+<!--                                    <i class="bi bi-arrow-down fs-5"></i> &lt;!&ndash; Down arrow icon &ndash;&gt;-->
+<!--                                </a>-->
+<!--                            </div>-->
 
                             <div class="col col-10">
                                 <div class="d-flex align-items-center mb-1">
@@ -90,13 +90,16 @@
                                         </span>
                                         <span class="ms-2" th:text="${#temporals.format(post.createdAt, 'MMMM dd, yyyy hh:mm')}">Time ago</span>
                                     </div>
-                                    <a th:href="@{/post/{id}(id=${post.id}, fragment='comments')}"
-                                        class="d-flex align-items-center text-muted text-decoration-none"
-                                        title="View Comments">
-                                        <i class="bi bi-chat-left me-1"></i> <!-- Comment icon -->
-                                        <span th:text="${post.comments.size()}">
+                                    <div class="d-flex">
+                                        <a th:href="@{/post/{id}(id=${post.id}, fragment='comments')}"
+                                           class="d-flex align-items-center text-muted text-decoration-none me-3"
+                                           title="View Comments">
+                                            <i class="bi bi-chat-left me-1"></i> <!-- Comment icon -->
+                                            <span th:text="${post.comments.size()}">
                                         </span>
-                                    </a>
+                                        </a>
+                                        <span><i th:class="${post.likeCount>0?'bi bi-arrow-up':'bi bi-arrow-down'}" th:text="${post.likeCount}"></i></span>
+                                    </div>
 
                                 </div>
                             </div>
@@ -153,9 +156,7 @@
     </div>
 
     <th:block th:replace="~{common/footer :: footer}"></th:block>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO"
-        crossorigin="anonymous"></script>
+
     <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
 </body>
 

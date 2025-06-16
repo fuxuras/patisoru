@@ -20,16 +20,8 @@
         <div class="row mx-auto row-cols-1 g-4">
             <div class="mx-auto col col-md-12 col-lg-9 card border-0 h-100 shadow-sm">
                 <div class="row pt-3">
-                    <div class="d-flex flex-column align-items-center me-3 text-center col col-1">
-                        <a href="#" title="Upvote" class="text-decoration-none text-muted d-block mb-1">
-                            <i class="bi bi-arrow-up fs-5"></i> <!-- Up arrow icon -->
-                        </a>
-                        <span class="fw-bold" th:text="${post.likeCount}">
-                                </span>
-                        <a href="#" title="Downvote" class="text-decoration-none text-muted d-block mt-1">
-                            <i class="bi bi-arrow-down fs-5"></i> <!-- Down arrow icon -->
-                        </a>
-                    </div>
+
+                    <th:block th:replace="~{common/like :: like-buttons(post=${post}, userLikeStatus=${userLikeStatus})}"></th:block>
 
                     <div class="col col-10">
                         <div class="d-flex align-items-center mb-1">
@@ -119,89 +111,14 @@
 
 
 </div>
+
+<th:block th:replace="~{common/login-prompt :: loginPromptModal}"></th:block>
+
 <th:block th:replace="~{common/footer :: footer}"></th:block>
 
 <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
 
-<script th:inline="javascript">
-    const csrfToken = document.querySelector("meta[name='_csrf']")?.getAttribute("content");
-    const csrfHeaderName = document.querySelector("meta[name='_csrf_header']")?.getAttribute("content");
-    const postId = /*[[${post.id}]]*/ '';
-    let status = "";
-    const likeCountElement = document.getElementById("like-count");
-    let likeCount = parseInt(likeCountElement.innerText,10);
-    const likeButton = document.getElementById("like-button");
-    const dislikeButton = document.getElementById("dislike-button");
-
-    // Fetch user's like status on page load
-    window.onload = function () {
-        fetch(`/likes/status?postId=${postId}`, {
-            method: "GET",
-            headers: {"Content-Type": "application/json",[csrfHeaderName]: csrfToken}
-        })
-            .then(response => response.json())
-            .then(data => {
-                status = data.status + '';
-                updateButtonStyles(); // Set initial button styles
-            })
-            .catch(error => console.error("Error fetching status:", error));
-    };
-
-    // TODO: shitty code here refactor code of handle like on ui
-    function handleLike(action) {
-        if (status === action) {
-            action = "remove";
-        }
-        if (action === "like") {
-            if (status === "dislike"){
-                likeCount+= 2;
-            }else {
-                likeCount++;
-            }
-        } else if (action === "dislike") {
-            if (status === "like"){
-                likeCount-= 2;
-            }else{
-                likeCount--;
-            }
-        } else if (action === "remove") {
-            // Remove like or dislike
-            if (status === "like") {
-                likeCount--;
-            } else if (status === "dislike") {
-                likeCount++;
-
-            }
-        }
-        status = action
-        fetch(`/likes/${action}?postId=${postId}`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json" ,
-                [csrfHeaderName]: csrfToken
-            }
-        }).catch(error => console.error("Error posting like: ", error));
-
-        updateButtonStyles()
-    }
-
-    function updateButtonStyles() {
-        // Reset button styles
-        likeButton.classList.remove("btn-success", "active");
-        dislikeButton.classList.remove("btn-danger", "active");
-        likeButton.classList.add("btn-outline-success");
-        dislikeButton.classList.add("btn-outline-danger");
-        likeCountElement.innerText = likeCount
-
-        if (status === "like") {
-            likeButton.classList.add("btn-success", "active");
-            likeButton.classList.remove("btn-outline-success");
-        } else if (status === "dislike") {
-            dislikeButton.classList.add("btn-danger", "active");
-            dislikeButton.classList.remove("btn-outline-danger");
-        }
-    }
-</script>
+<th:block th:replace="~{common/like :: like-script}"></th:block>
 
 </body>
 </html>

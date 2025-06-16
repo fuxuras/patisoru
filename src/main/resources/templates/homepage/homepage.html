@@ -30,16 +30,16 @@
             <div class="row mx-auto row-cols-1 g-4" th:each="post : ${featuredPosts}">
                 <div class="mx-auto col col-md-9 col-lg-6 card border-0 h-100 shadow-sm">
                     <div class="row pt-3">
-                        <div class="d-flex flex-column align-items-center me-3 text-center col col-1">
-                            <a href="#" title="Upvote" class="text-decoration-none text-muted d-block mb-1">
-                                <i class="bi bi-arrow-up fs-5"></i> <!-- Up arrow icon -->
-                            </a>
-                            <span class="fw-bold" th:text="${post.likeCount}">
-                                </span>
-                            <a href="#" title="Downvote" class="text-decoration-none text-muted d-block mt-1">
-                                <i class="bi bi-arrow-down fs-5"></i> <!-- Down arrow icon -->
-                            </a>
-                        </div>
+<!--                        <div class="d-flex flex-column align-items-center me-3 text-center col col-1">-->
+<!--                            <a href="#" title="Upvote" class="text-decoration-none text-muted d-block mb-1">-->
+<!--                                <i class="bi bi-arrow-up fs-5"></i> &lt;!&ndash; Up arrow icon &ndash;&gt;-->
+<!--                            </a>-->
+<!--                            <span class="fw-bold" th:text="${post.likeCount}">-->
+<!--                                </span>-->
+<!--                            <a href="#" title="Downvote" class="text-decoration-none text-muted d-block mt-1">-->
+<!--                                <i class="bi bi-arrow-down fs-5"></i> &lt;!&ndash; Down arrow icon &ndash;&gt;-->
+<!--                            </a>-->
+<!--                        </div>-->
 
                         <div class="col col-10">
                             <div class="d-flex align-items-center mb-1">
@@ -68,6 +68,9 @@
                                                th:text="${post.user.fullName}">Username</a>
                                         </span>
                                     <span class="ms-2" th:text="${#temporals.format(post.createdAt, 'MMMM dd, yyyy hh:mm')}">Time ago</span>
+                                </div>
+                                <div class="d-flex">
+                                    <span><i th:class="${post.likeCount>0?'bi bi-arrow-up':'bi bi-arrow-down'}" th:text="${post.likeCount}"></i></span>
                                 </div>
                             </div>
                         </div>
