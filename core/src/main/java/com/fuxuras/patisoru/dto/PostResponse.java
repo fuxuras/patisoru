@@ -21,4 +21,5 @@ public class PostResponse {
     private UserInPostResponse user;
     private List<CommentInPostResponse> comments;
     private long likeCount;
+    private String userLikeStatus;
 }
