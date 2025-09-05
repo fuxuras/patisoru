@@ -1,6 +1,6 @@
 package com.fuxuras.patisoru.exceptions;
 
-import com.fuxuras.patisoru.dto.ResponseMessage;
+import com.fuxuras.patisoru.dto.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -11,32 +11,35 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @ControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
-    /**
-     * Handles cases where a user tries to register with an email that already exists.
-     * The UserService should throw this exception in that scenario.
-     */
     @ExceptionHandler(UserAlreadyExistsException.class)
-    public ResponseEntity<ResponseMessage> handleUserAlreadyExistsException(UserAlreadyExistsException ex, WebRequest request) {
-        ResponseMessage message = new ResponseMessage(ex.getMessage(), -10); // Example error code
-        return new ResponseEntity<>(message, HttpStatus.CONFLICT); // 409 Conflict
+    public ResponseEntity<ErrorResponse> handleUserAlreadyExistsException(UserAlreadyExistsException ex, WebRequest request) {
+        ErrorResponse errorResponse = new ErrorResponse(
+                HttpStatus.CONFLICT,
+                ex.getMessage(),
+                request.getDescription(false).replace("uri=", "")
+        );
+        return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
     }
 
-    /**
-     * Handles cases where email verification fails due to an invalid or expired token.
-     * The UserService should throw this exception.
-     */
     @ExceptionHandler(InvalidTokenException.class)
-    public ResponseEntity<ResponseMessage> handleInvalidTokenException(InvalidTokenException ex, WebRequest request) {
-        ResponseMessage message = new ResponseMessage(ex.getMessage(), -20); // Example error code
-        return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST); // 400 Bad Request
+    public ResponseEntity<ErrorResponse> handleInvalidTokenException(InvalidTokenException ex, WebRequest request) {
+        ErrorResponse errorResponse = new ErrorResponse(
+                HttpStatus.BAD_REQUEST,
+                ex.getMessage(),
+                request.getDescription(false).replace("uri=", "")
+        );
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
-    /**
-     * A general handler for other unexpected exceptions to prevent exposing stack traces.
-     */
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ResponseMessage> handleGlobalException(Exception ex, WebRequest request) {
-        ResponseMessage message = new ResponseMessage("An unexpected internal server error occurred.", -99);
-        return new ResponseEntity<>(message, HttpStatus.INTERNAL_SERVER_ERROR); // 500
+    public ResponseEntity<ErrorResponse> handleGlobalException(Exception ex, WebRequest request) {
+        // It's a good practice to log the full exception for debugging purposes
+        // logger.error("An unexpected error occurred", ex);
+        ErrorResponse errorResponse = new ErrorResponse(
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                "An unexpected internal server error occurred. Please contact support.",
+                request.getDescription(false).replace("uri=", "")
+        );
+        return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
