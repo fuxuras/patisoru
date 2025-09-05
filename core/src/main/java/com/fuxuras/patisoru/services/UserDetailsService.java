@@ -1,7 +1,6 @@
 package com.fuxuras.patisoru.services;
 
-import com.fuxuras.patisoru.entities.User;
-import com.fuxuras.patisoru.repositories.UserRepository;
+import com.fuxuras.patisoru.exceptions.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -11,11 +10,14 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserDetailsService implements org.springframework.security.core.userdetails.UserDetailsService {
 
-    private final UserRepository userRepository;
+    private final UserService userService;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findByEmail(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + username));
+        try {
+            return userService.findByEmail(username);
+        } catch (UserNotFoundException e) {
+            throw new UsernameNotFoundException(e.getMessage(), e);
+        }
     }
 }

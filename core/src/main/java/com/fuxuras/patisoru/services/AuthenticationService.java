@@ -12,7 +12,6 @@ import com.fuxuras.patisoru.entities.VerificationToken;
 import com.fuxuras.patisoru.exceptions.InvalidTokenException;
 import com.fuxuras.patisoru.exceptions.UserAlreadyExistsException;
 import com.fuxuras.patisoru.repositories.RoleRepository;
-import com.fuxuras.patisoru.repositories.UserRepository;
 import com.fuxuras.patisoru.repositories.VerificationTokenRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -28,7 +27,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AuthenticationService {
 
-    private final UserRepository userRepository;
+    private final UserService userService;
     private final RoleRepository roleRepository;
     private final VerificationTokenRepository verificationTokenRepository;
     private final PasswordEncoder passwordEncoder;
@@ -39,9 +38,9 @@ public class AuthenticationService {
 
     @Transactional
     public void register(RegisterRequest registerRequest) {
-        userRepository.findByEmail(registerRequest.getEmail()).ifPresent(user -> {
+        if (userService.existsByEmail(registerRequest.getEmail())) {
             throw new UserAlreadyExistsException("User with email " + registerRequest.getEmail() + " already exists.");
-        });
+        }
 
         User user = mapper.RegisterRequestToUser(registerRequest);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -51,7 +50,7 @@ public class AuthenticationService {
         user.getRoles().add(userRole);
         user.setStatus(Status.PENDING);
 
-        User savedUser = userRepository.save(user);
+        User savedUser = userService.save(user);
         emailService.sendAuthMail(savedUser);
     }
 
@@ -64,11 +63,10 @@ public class AuthenticationService {
             throw new InvalidTokenException("Invalid verification token.");
         }
 
-        User user = userRepository.findByEmail(emailVerification.getEmail())
-                .orElseThrow(() -> new RuntimeException("User not found after token validation. Data integrity issue."));
+        User user = userService.findByEmail(emailVerification.getEmail());
 
         user.setStatus(Status.ACTIVE);
-        userRepository.save(user);
+        userService.save(user);
         // Optionally, delete the token after successful verification
         // verificationTokenRepository.delete(token);
     }
@@ -80,8 +78,7 @@ public class AuthenticationService {
                         loginRequest.getPassword()
                 )
         );
-        User user = userRepository.findByEmail(loginRequest.getEmail())
-                .orElseThrow(() -> new RuntimeException("User not found after successful authentication. Data integrity issue."));
+        User user = userService.findByEmail(loginRequest.getEmail());
 
         String jwtToken = jwtService.generateToken(user);
 
