@@ -4,9 +4,9 @@ import com.fuxuras.patisoru.configuration.DtoMapper;
 import com.fuxuras.patisoru.dto.FeaturedPost;
 import com.fuxuras.patisoru.dto.PostCreateRequest;
 import com.fuxuras.patisoru.dto.PostResponse;
-import com.fuxuras.patisoru.dto.ResponseMessage;
 import com.fuxuras.patisoru.entities.Post;
 import com.fuxuras.patisoru.entities.User;
+import com.fuxuras.patisoru.exceptions.PostNotFoundException;
 import com.fuxuras.patisoru.repositories.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
@@ -15,11 +15,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -30,9 +28,8 @@ public class PostService {
 
 
     public PostResponse getPostById(UUID id) {
-        Post post = postRepository.findById(id).orElseThrow(()-> new RuntimeException("Post not found"));
-        PostResponse postResponse = mapper.postToPostResponse(post);
-        return postResponse;
+        Post post = postRepository.findById(id).orElseThrow(()-> new PostNotFoundException("Post not found with id: " + id));
+        return mapper.postToPostResponse(post);
     }
 
     @Cacheable(value = "featured_post")
@@ -40,7 +37,7 @@ public class PostService {
         List<Post> posts = postRepository.findTop5ByCreatedAtAfterOrderByLikeCountDesc(LocalDateTime.now().minusMonths(1));
         List<FeaturedPost> featuredPosts = posts.stream()
                 .map(mapper::postToFeaturedPost)
-                .collect(Collectors.toList());
+                .toList();
         return featuredPosts;
     }
     
@@ -49,16 +46,12 @@ public class PostService {
         return posts.map(mapper::postToPostResponse);
     }
 
-    public ResponseMessage create(PostCreateRequest postCreateRequest, String name) {
-        User user = userService.findByEmail(name).orElseThrow(()-> new RuntimeException("User not found"));
+    public PostResponse create(PostCreateRequest postCreateRequest, String username) {
+        User user = userService.findByEmail(username);
         Post post = mapper.PostCreateRequestToPost(postCreateRequest);
         post.setUser(user);
-        postRepository.save(post);
-
-        ResponseMessage responseMessage = new ResponseMessage();
-        responseMessage.setMessage("Gönderiniz başarıyla paylaşıldı.");
-        responseMessage.setCode(1);
-        return responseMessage;
+        Post savedPost = postRepository.save(post);
+        return mapper.postToPostResponse(savedPost);
     }
 
     protected Optional<Post> findPostById(UUID id) {
