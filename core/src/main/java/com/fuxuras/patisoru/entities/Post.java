@@ -9,6 +9,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 
 import java.util.List;
 
@@ -17,6 +19,8 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@SQLDelete(sql = "UPDATE post SET deleted = true, updated_at = now() WHERE id=?")
+@SQLRestriction("deleted = false")
 public class Post extends BaseEntity{
     @Column(length = 64)
     private String title;
@@ -28,6 +32,8 @@ public class Post extends BaseEntity{
     private PostType postType;
 
     private Long likeCount;
+
+    private boolean deleted = Boolean.FALSE;
 
     @ManyToOne
     @JsonBackReference

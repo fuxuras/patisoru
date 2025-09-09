@@ -18,19 +18,19 @@ public class ProfileController {
 
     private final UserService userService;
 
-    @GetMapping
-    public ResponseEntity<UserResponse> profile(@AuthenticationPrincipal UserDetails userDetails) {
-        UserResponse user = userService.getByEmail(userDetails.getUsername());
-        return ResponseEntity.ok(user);
-    }
-
-    @PutMapping
-    public ResponseEntity<ResponseMessage> update(@AuthenticationPrincipal UserDetails userDetails, @Valid @RequestBody UserEditRequest userEditRequest) {
-        ResponseMessage message = userService.editUser(userEditRequest, userDetails.getUsername());
-        if (message.getCode() > 0) {
-            return ResponseEntity.ok(message);
-        } else {
-            return ResponseEntity.badRequest().body(message);
-        }
-    }
+//    @GetMapping
+//    public ResponseEntity<UserResponse> profile(@AuthenticationPrincipal UserDetails userDetails) {
+//        UserResponse user = userService.getByEmail(userDetails.getUsername());
+//        return ResponseEntity.ok(user);
+//    }
+//
+//    @PutMapping
+//    public ResponseEntity<ResponseMessage> update(@AuthenticationPrincipal UserDetails userDetails, @Valid @RequestBody UserEditRequest userEditRequest) {
+//        ResponseMessage message = userService.editUser(userEditRequest, userDetails.getUsername());
+//        if (message.getCode() > 0) {
+//            return ResponseEntity.ok(message);
+//        } else {
+//            return ResponseEntity.badRequest().body(message);
+//        }
+//    }
 }

@@ -7,11 +7,13 @@ import com.fuxuras.patisoru.entities.Post;
 import com.fuxuras.patisoru.entities.PostType;
 import com.fuxuras.patisoru.entities.User;
 import com.fuxuras.patisoru.exceptions.PostNotFoundException;
+import com.fuxuras.patisoru.exceptions.UnauthorizedPostAccessException;
 import com.fuxuras.patisoru.repositories.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -28,19 +30,21 @@ public class PostService {
 
 
     public PostResponse getPostById(UUID id) {
-        Post post = postRepository.findById(id).orElseThrow(()-> new PostNotFoundException("Post not found with id: " + id));
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new PostNotFoundException("Post not found with id: " + id));
         return mapper.postToPostResponse(post);
     }
 
     @Cacheable(value = "featured_post")
-    public List<PostResponse> getFeaturedPosts(){
-        List<Post> posts = postRepository.findTop5ByCreatedAtAfterOrderByLikeCountDesc(LocalDateTime.now().minusMonths(1));
+    public List<PostResponse> getFeaturedPosts() {
+        List<Post> posts = postRepository
+                .findTop5ByCreatedAtAfterOrderByLikeCountDesc(LocalDateTime.now().minusMonths(1));
         List<PostResponse> postResponse = posts.stream()
                 .map(mapper::postToPostResponse)
                 .toList();
         return postResponse;
     }
-    
+
     public Page<PostResponse> getAllPosts(Pageable pageable) {
         Page<Post> posts = postRepository.findAll(pageable);
         return posts.map(mapper::postToPostResponse);
@@ -62,6 +66,15 @@ public class PostService {
 
         Post savedPost = postRepository.save(post);
         return mapper.postToPostResponse(savedPost);
+    }
+
+    @PreAuthorize("@postRepository.findById(#postId).get().getUser().getEmail() == authentication.name")
+    public void deletePost(UUID postId){
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new PostNotFoundException("Post not found with id: " + postId));
+
+
+        postRepository.deleteById(postId);
     }
 
     protected Optional<Post> findPostById(UUID id) {
