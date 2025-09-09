@@ -5,6 +5,7 @@ import com.fuxuras.patisoru.dto.FeaturedPost;
 import com.fuxuras.patisoru.dto.PostCreateRequest;
 import com.fuxuras.patisoru.dto.PostResponse;
 import com.fuxuras.patisoru.entities.Post;
+import com.fuxuras.patisoru.entities.PostType;
 import com.fuxuras.patisoru.entities.User;
 import com.fuxuras.patisoru.exceptions.PostNotFoundException;
 import com.fuxuras.patisoru.repositories.PostRepository;
@@ -50,6 +51,16 @@ public class PostService {
         User user = userService.findByEmail(username);
         Post post = mapper.PostCreateRequestToPost(postCreateRequest);
         post.setUser(user);
+
+        // Automatically determine the PostType based on user roles
+        if (user.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_VET"))) {
+            post.setPostType(PostType.VET_POST);
+        } else if (user.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_VERIFIED"))) {
+            post.setPostType(PostType.VERIFIED_POST);
+        } else {
+            post.setPostType(PostType.USER_POST);
+        }
+
         Post savedPost = postRepository.save(post);
         return mapper.postToPostResponse(savedPost);
     }
