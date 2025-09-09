@@ -1,8 +1,8 @@
 package com.fuxuras.patisoru.controllers;
 
 import com.fuxuras.patisoru.dto.ResponseMessage;
-import com.fuxuras.patisoru.dto.UserEditRequest;
-import com.fuxuras.patisoru.dto.UserResponse;
+import com.fuxuras.patisoru.dto.user.UserEditRequest;
+import com.fuxuras.patisoru.dto.user.UserResponse;
 import com.fuxuras.patisoru.services.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

@@ -1,4 +1,4 @@
-package com.fuxuras.patisoru.dto;
+package com.fuxuras.patisoru.dto.auth;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

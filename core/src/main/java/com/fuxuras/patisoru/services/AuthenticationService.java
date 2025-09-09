@@ -1,8 +1,8 @@
 package com.fuxuras.patisoru.services;
 
 import com.fuxuras.patisoru.configuration.DtoMapper;
-import com.fuxuras.patisoru.dto.EmailVerification;
-import com.fuxuras.patisoru.dto.RegisterRequest;
+import com.fuxuras.patisoru.dto.auth.EmailVerification;
+import com.fuxuras.patisoru.dto.auth.RegisterRequest;
 import com.fuxuras.patisoru.dto.auth.LoginRequest;
 import com.fuxuras.patisoru.dto.auth.LoginResponse;
 import com.fuxuras.patisoru.entities.Role;

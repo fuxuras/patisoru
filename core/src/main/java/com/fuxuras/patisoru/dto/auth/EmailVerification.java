@@ -1,4 +1,4 @@
-package com.fuxuras.patisoru.dto;
+package com.fuxuras.patisoru.dto.auth;
 
 import lombok.Data;
 
