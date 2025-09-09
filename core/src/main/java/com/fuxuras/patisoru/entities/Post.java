@@ -23,6 +23,10 @@ public class Post extends BaseEntity{
     @Column(length = 512)
     private String text;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "post_type", nullable = false)
+    private PostType postType;
+
     private Long likeCount;
 
     @ManyToOne
