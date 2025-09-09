@@ -14,6 +14,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -27,12 +28,21 @@ public class PostService {
     private final PostRepository postRepository;
     private final DtoMapper mapper;
     private final UserService userService;
+    private final LikeService likeService;
 
 
-    public PostResponse getPostById(UUID id) {
+    public PostResponse getPostById(UUID id, UserDetails userDetails) {
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new PostNotFoundException("Post not found with id: " + id));
-        return mapper.postToPostResponse(post);
+
+        PostResponse postResponse =mapper.postToPostResponse(post);
+
+        String userLikeStatus = "remove";
+        if (userDetails != null){
+            userLikeStatus = likeService.getStatus(post.getId(), userDetails.getUsername());
+        }
+        postResponse.setUserLikeStatus(userLikeStatus);
+        return postResponse;
     }
 
     @Cacheable(value = "featured_post")

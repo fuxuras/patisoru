@@ -20,16 +20,10 @@ import java.util.UUID;
 public class PostController {
 
     private final PostService postService;
-    private final LikeService likeService;
 
     @GetMapping("/{id}")
     public ResponseEntity<PostResponse> getPostById(@PathVariable UUID id, @AuthenticationPrincipal UserDetails userDetails) {
-        PostResponse post = postService.getPostById(id);
-        String userLikeStatus = "remove"; // Default for non-logged-in users
-        if (userDetails != null) {
-            userLikeStatus = likeService.getStatus(post.getId(), userDetails.getUsername());
-        }
-        post.setUserLikeStatus(userLikeStatus);
+        PostResponse post = postService.getPostById(id, userDetails);
         return ResponseEntity.ok(post);
     }
 
