@@ -1,4 +1,4 @@
-package com.fuxuras.patisoru.dto;
+package com.fuxuras.patisoru.dto.post;
 
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;

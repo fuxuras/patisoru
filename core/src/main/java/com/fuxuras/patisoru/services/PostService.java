@@ -1,9 +1,8 @@
 package com.fuxuras.patisoru.services;
 
 import com.fuxuras.patisoru.configuration.DtoMapper;
-import com.fuxuras.patisoru.dto.FeaturedPost;
-import com.fuxuras.patisoru.dto.PostCreateRequest;
-import com.fuxuras.patisoru.dto.PostResponse;
+import com.fuxuras.patisoru.dto.post.PostCreateRequest;
+import com.fuxuras.patisoru.dto.post.PostResponse;
 import com.fuxuras.patisoru.entities.Post;
 import com.fuxuras.patisoru.entities.PostType;
 import com.fuxuras.patisoru.entities.User;
@@ -34,12 +33,12 @@ public class PostService {
     }
 
     @Cacheable(value = "featured_post")
-    public List<FeaturedPost> getFeaturedPosts(){
+    public List<PostResponse> getFeaturedPosts(){
         List<Post> posts = postRepository.findTop5ByCreatedAtAfterOrderByLikeCountDesc(LocalDateTime.now().minusMonths(1));
-        List<FeaturedPost> featuredPosts = posts.stream()
-                .map(mapper::postToFeaturedPost)
+        List<PostResponse> postResponse = posts.stream()
+                .map(mapper::postToPostResponse)
                 .toList();
-        return featuredPosts;
+        return postResponse;
     }
     
     public Page<PostResponse> getAllPosts(Pageable pageable) {

@@ -1,6 +1,6 @@
 package com.fuxuras.patisoru.controllers;
 
-import com.fuxuras.patisoru.dto.PostResponse;
+import com.fuxuras.patisoru.dto.post.PostResponse;
 import com.fuxuras.patisoru.services.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

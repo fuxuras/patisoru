@@ -2,14 +2,17 @@ package com.fuxuras.patisoru.configuration;
 
 
 import com.fuxuras.patisoru.dto.*;
+import com.fuxuras.patisoru.dto.auth.RegisterRequest;
+import com.fuxuras.patisoru.dto.post.PostCreateRequest;
+import com.fuxuras.patisoru.dto.post.PostResponse;
+import com.fuxuras.patisoru.dto.user.UserEditRequest;
+import com.fuxuras.patisoru.dto.user.UserResponse;
 import com.fuxuras.patisoru.dto.user.UserSummaryResponse;
 import com.fuxuras.patisoru.entities.Comment;
 import com.fuxuras.patisoru.entities.Post;
 import com.fuxuras.patisoru.entities.User;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
-import org.mapstruct.factory.Mappers;
 
 @Mapper(componentModel = "spring")
 public interface DtoMapper {
@@ -17,8 +20,6 @@ public interface DtoMapper {
     PostResponse postToPostResponse(Post post);
 
     CommentInPostResponse commentToCommentInPostResponse(Comment comment);
-
-    FeaturedPost postToFeaturedPost(Post post);
 
     Post PostCreateRequestToPost(PostCreateRequest postCreateRequest);
 

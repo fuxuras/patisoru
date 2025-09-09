@@ -1,7 +1,7 @@
 package com.fuxuras.patisoru.controllers;
 
-import com.fuxuras.patisoru.dto.PostCreateRequest;
-import com.fuxuras.patisoru.dto.PostResponse;
+import com.fuxuras.patisoru.dto.post.PostCreateRequest;
+import com.fuxuras.patisoru.dto.post.PostResponse;
 import com.fuxuras.patisoru.services.LikeService;
 import com.fuxuras.patisoru.services.PostService;
 import jakarta.validation.Valid;

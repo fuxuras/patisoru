@@ -1,5 +1,6 @@
-package com.fuxuras.patisoru.dto;
+package com.fuxuras.patisoru.dto.post;
 
+import com.fuxuras.patisoru.dto.CommentInPostResponse;
 import com.fuxuras.patisoru.dto.user.UserSummaryResponse;
 import com.fuxuras.patisoru.entities.PostType;
 import lombok.AllArgsConstructor;
@@ -8,18 +9,21 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
-public class FeaturedPost{
+@AllArgsConstructor
+public class PostResponse {
     private UUID id;
+    private LocalDateTime createdAt;
     private String title;
     private String text;
     private PostType postType;
-    private Long likeCount;
     private UserSummaryResponse user;
-   private LocalDateTime createdAt;
+    private List<CommentInPostResponse> comments;
+    private long likeCount;
+    private String userLikeStatus;
 }
