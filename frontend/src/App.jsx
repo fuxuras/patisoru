@@ -13,7 +13,10 @@ function App() {
             <Button>Click me</Button>
         </div>
         <div className="flex min-h-svh flex-col items-center justify-center">
-            <Button>Click me</Button>
+            <Button>Click me 2</Button>
+        </div>
+        <div className="flex min-h-svh flex-col items-center justify-center">
+            <Button>Click me 3</Button>
         </div>
     </>
   )
