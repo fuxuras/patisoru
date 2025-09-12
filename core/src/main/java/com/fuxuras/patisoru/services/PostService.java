@@ -78,7 +78,7 @@ public class PostService {
         return mapper.postToPostResponse(savedPost);
     }
 
-    @PreAuthorize("@postRepository.findById(#postId).get().getUser().getEmail() == authentication.name")
+    @PreAuthorize("@postSecurityService.isOwner(authentication,#postId)")
     public void deletePost(UUID postId){
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new PostNotFoundException("Post not found with id: " + postId));
