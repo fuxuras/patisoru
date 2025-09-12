@@ -67,8 +67,7 @@ public class AuthenticationService {
 
         user.setStatus(Status.ACTIVE);
         userService.save(user);
-        // Optionally, delete the token after successful verification
-        // verificationTokenRepository.delete(token);
+        verificationTokenRepository.delete(token);
     }
 
     public LoginResponse login(LoginRequest loginRequest) {
