@@ -1,4 +1,4 @@
-package com.fuxuras.patisoru.configuration;
+package com.fuxuras.patisoru.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fuxuras.patisoru.dto.ErrorResponse;
