@@ -21,6 +21,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -61,6 +62,11 @@ public class AuthenticationService {
 
         if (!token.getToken().equals(emailVerification.getToken())) {
             throw new InvalidTokenException("Invalid verification token.");
+        }
+
+        if (token.getExpiryDate().isBefore(LocalDateTime.now())) {
+            verificationTokenRepository.delete(token); // Expired token should be removed
+            throw new InvalidTokenException("Verification token has expired.");
         }
 
         User user = userService.findByEmail(emailVerification.getEmail());
