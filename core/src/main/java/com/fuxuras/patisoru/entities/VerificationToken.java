@@ -13,7 +13,6 @@ import org.hibernate.annotations.CreationTimestamp;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Entity
 @Getter
@@ -27,14 +26,13 @@ public class VerificationToken extends BaseEntity {
 
     private String token;
 
-    private static final int EXPIRES_IN_DAYS = 14;
+    private LocalDateTime expiryDate;
 
-    public boolean isExpired(){
-        return LocalDateTime.now().isAfter(this.getCreatedAt().plusDays(EXPIRES_IN_DAYS));
-    }
+    private static final int EXPIRATION_HOURS = 24;
 
     public void createVerificationToken(){
         SecureRandom random = new SecureRandom();
         this.token = new BigInteger(28, random).toString(32);
+        this.expiryDate = LocalDateTime.now().plusHours(EXPIRATION_HOURS);
     }
 }
