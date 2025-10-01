@@ -3,6 +3,7 @@ package com.fuxuras.patisoru.configuration;
 
 import com.fuxuras.patisoru.dto.*;
 import com.fuxuras.patisoru.dto.auth.RegisterRequest;
+import com.fuxuras.patisoru.dto.comment.CommentResponse;
 import com.fuxuras.patisoru.dto.post.PostCreateRequest;
 import com.fuxuras.patisoru.dto.post.PostResponse;
 import com.fuxuras.patisoru.dto.user.UserEditRequest;
@@ -19,7 +20,7 @@ public interface DtoMapper {
 
     PostResponse postToPostResponse(Post post);
 
-    CommentInPostResponse commentToCommentInPostResponse(Comment comment);
+    CommentResponse commentToCommentResponse(Comment comment);
 
     Post PostCreateRequestToPost(PostCreateRequest postCreateRequest);
 

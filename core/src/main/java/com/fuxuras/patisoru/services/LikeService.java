@@ -35,7 +35,7 @@ public class LikeService {
     }
 
     private long saveLike(UUID postId,String email, Boolean isLike) {
-        User user = userService.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
+        User user = userService.findByEmail(email);
         Post post = postService.findPostById(postId).orElseThrow(() -> new RuntimeException("Post not found"));
         LikeId likeId = new LikeId(postId,user.getId());
         if (isLike == null) {
@@ -60,7 +60,7 @@ public class LikeService {
     }
 
     public String getStatus(UUID postId, String name) {
-        User user = userService.findByEmail(name).orElseThrow(() -> new RuntimeException("User not found"));
+        User user = userService.findByEmail(name);
         LikeId likeId = new LikeId(postId,user.getId());
         return likeRepository.findById(likeId)
                 .map(like -> {

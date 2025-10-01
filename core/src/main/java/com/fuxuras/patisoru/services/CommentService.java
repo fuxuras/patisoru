@@ -2,7 +2,7 @@ package com.fuxuras.patisoru.services;
 
 import com.fuxuras.patisoru.configuration.DtoMapper;
 import com.fuxuras.patisoru.dto.CommentCreateRequest;
-import com.fuxuras.patisoru.dto.CommentInPostResponse;
+import com.fuxuras.patisoru.dto.comment.CommentResponse;
 import com.fuxuras.patisoru.entities.Comment;
 import com.fuxuras.patisoru.entities.Post;
 import com.fuxuras.patisoru.entities.User;
@@ -23,7 +23,7 @@ public class CommentService {
     private final DtoMapper mapper;
     private final PostService postService;
 
-    public CommentInPostResponse create(CommentCreateRequest commentCreateRequest, String email, UUID postId) {
+    public CommentResponse create(CommentCreateRequest commentCreateRequest, String email, UUID postId) {
         Comment comment = mapper.CommentCreateRequestToComment(commentCreateRequest);
         User user = userService.findByEmail(email);
         Post post = postService.findPostById(postId)
@@ -31,15 +31,15 @@ public class CommentService {
         comment.setUser(user);
         comment.setPost(post);
         Comment savedComment = commentRepository.save(comment);
-        return mapper.commentToCommentInPostResponse(savedComment);
+        return mapper.commentToCommentResponse(savedComment);
     }
 
-    public List<CommentInPostResponse> getCommentsByPostId(UUID postId) {
+    public List<CommentResponse> getCommentsByPostId(UUID postId) {
         postService.findPostById(postId)
                 .orElseThrow(() -> new PostNotFoundException("Post with id " + postId + " not found"));
         List<Comment> comments = commentRepository.findByPostId(postId);
         return comments.stream()
-                .map(mapper::commentToCommentInPostResponse)
+                .map(mapper::commentToCommentResponse)
                 .collect(Collectors.toList());
     }
 }

@@ -1,6 +1,6 @@
 package com.fuxuras.patisoru.dto.post;
 
-import com.fuxuras.patisoru.dto.CommentInPostResponse;
+import com.fuxuras.patisoru.dto.comment.CommentResponse;
 import com.fuxuras.patisoru.dto.user.UserSummaryResponse;
 import com.fuxuras.patisoru.entities.PostType;
 import lombok.AllArgsConstructor;
@@ -23,7 +23,7 @@ public class PostResponse {
     private String text;
     private PostType postType;
     private UserSummaryResponse user;
-    private List<CommentInPostResponse> comments;
+    private List<CommentResponse> comments;
     private long likeCount;
     private String userLikeStatus;
 }
