@@ -58,3 +58,6 @@ dist-ssr
 *.sln
 *.sw?
 node_modules
+
+### Gemini ###
+GEMINI.md
