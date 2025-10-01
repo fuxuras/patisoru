@@ -1,8 +1,7 @@
 package com.fuxuras.patisoru.controllers;
 
 import com.fuxuras.patisoru.dto.CommentCreateRequest;
-import com.fuxuras.patisoru.dto.CommentInPostResponse;
-import com.fuxuras.patisoru.entities.Comment;
+import com.fuxuras.patisoru.dto.comment.CommentResponse;
 import com.fuxuras.patisoru.services.CommentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -22,17 +21,17 @@ public class CommentController {
     private final CommentService commentService;
 
     @PostMapping
-    public ResponseEntity<Comment> createComment(@Valid @RequestBody CommentCreateRequest commentCreateRequest,
+    public ResponseEntity<CommentResponse> createComment(@Valid @RequestBody CommentCreateRequest commentCreateRequest,
                                                  @AuthenticationPrincipal UserDetails userDetails,
                                                  @PathVariable(name = "postId") UUID postId) {
 
-        Comment createdComment = commentService.create(commentCreateRequest, userDetails.getUsername(), postId);
+        CommentResponse createdComment = commentService.create(commentCreateRequest, userDetails.getUsername(), postId);
         return new ResponseEntity<>(createdComment, HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<List<CommentInPostResponse>> getCommentsByPostId(@PathVariable(name = "postId") UUID postId) {
-        List<CommentInPostResponse> comments = commentService.getCommentsByPostId(postId);
+    public ResponseEntity<List<CommentResponse>> getCommentsByPostId(@PathVariable(name = "postId") UUID postId) {
+        List<CommentResponse> comments = commentService.getCommentsByPostId(postId);
         return new ResponseEntity<>(comments, HttpStatus.OK);
     }
 
