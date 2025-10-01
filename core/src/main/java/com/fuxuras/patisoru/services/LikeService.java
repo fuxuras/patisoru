@@ -62,14 +62,7 @@ public class LikeService {
     public String getStatus(UUID postId, String name) {
         User user = userService.findByEmail(name);
         LikeId likeId = new LikeId(postId,user.getId());
-        return likeRepository.findById(likeId)
-                .map(like -> {
-                    Boolean isLike = like.getIsLike();
-                    if (isLike == null) {
-                        return "remove"; // Default value when isLike is null
-                    }
-                    return isLike ? "like" : "dislike";
-                })
-                .orElse("remove");
+        Optional<Like> like = likeRepository.findById(likeId);
+        return like.map(value -> value.getIsLike() ? "like" : "dislike").orElse("");
     }
 }
