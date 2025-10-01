@@ -1,15 +1,18 @@
 package com.fuxuras.patisoru.controllers;
 
 import com.fuxuras.patisoru.dto.CommentCreateRequest;
-import com.fuxuras.patisoru.dto.ResponseMessage;
+import com.fuxuras.patisoru.dto.CommentInPostResponse;
+import com.fuxuras.patisoru.entities.Comment;
 import com.fuxuras.patisoru.services.CommentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -19,20 +22,18 @@ public class CommentController {
     private final CommentService commentService;
 
     @PostMapping
-    public ResponseEntity<ResponseMessage> createComment(@Valid @RequestBody CommentCreateRequest commentCreateRequest,
-                                                       @AuthenticationPrincipal UserDetails userDetails,
-                                                       @PathVariable(name = "postId") UUID postId) {
+    public ResponseEntity<Comment> createComment(@Valid @RequestBody CommentCreateRequest commentCreateRequest,
+                                                 @AuthenticationPrincipal UserDetails userDetails,
+                                                 @PathVariable(name = "postId") UUID postId) {
 
-        ResponseMessage message = commentService.create(commentCreateRequest, userDetails.getUsername(), postId);
-        if (message.getCode() > 0) {
-            return ResponseEntity.ok(message);
-        } else {
-            return ResponseEntity.badRequest().body(message);
-        }
+        Comment createdComment = commentService.create(commentCreateRequest, userDetails.getUsername(), postId);
+        return new ResponseEntity<>(createdComment, HttpStatus.CREATED);
     }
 
-    //TODO: feature: comment delete
-
-    //TODO: feature: comment update
+    @GetMapping
+    public ResponseEntity<List<CommentInPostResponse>> getCommentsByPostId(@PathVariable(name = "postId") UUID postId) {
+        List<CommentInPostResponse> comments = commentService.getCommentsByPostId(postId);
+        return new ResponseEntity<>(comments, HttpStatus.OK);
+    }
 
 }
