@@ -31,30 +31,25 @@ public class RedisConfig {
     }
 
     @Bean
-    public ObjectMapper objectMapper() {
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new JavaTimeModule()); // Enable Java 8 date/time support
-        mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS); // Use ISO-8601 strings instead of timestamps
-
-        mapper.activateDefaultTyping(
-                mapper.getPolymorphicTypeValidator(),
+    public RedisCacheManager cacheManager(RedisConnectionFactory connectionFactory) {
+        // Create a custom ObjectMapper specifically for Redis
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        objectMapper.activateDefaultTyping(
+                objectMapper.getPolymorphicTypeValidator(),
                 ObjectMapper.DefaultTyping.NON_FINAL,
                 JsonTypeInfo.As.PROPERTY
         );
 
-        return mapper;
-    }
-
-    @Bean
-    public RedisCacheManager cacheManager(RedisConnectionFactory connectionFactory, ObjectMapper objectMapper) {
         // Configure the serializer with the custom ObjectMapper
         GenericJackson2JsonRedisSerializer serializer = new GenericJackson2JsonRedisSerializer(objectMapper);
 
         RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig()
-                .entryTtl(Duration.ofMinutes(60)) // Set a default TTL (Time-To-Live) - adjust as needed
-                .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer())) // Serialize keys as Strings
-                .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(serializer)) // Use custom serializer for values
-                .disableCachingNullValues(); // Don't cache null values
+                .entryTtl(Duration.ofMinutes(60))
+                .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer()))
+                .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(serializer))
+                .disableCachingNullValues();
 
         return RedisCacheManager.builder(connectionFactory)
                 .cacheDefaults(config)
