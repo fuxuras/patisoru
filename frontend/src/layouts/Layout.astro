@@ -1,0 +1,25 @@
+---
+import "../styles/global.css";
+
+const { title } = Astro.props;
+---
+
+<!doctype html>
+<html lang="tr">
+    <head>
+        <meta charset="UTF-8" />
+        <meta
+            name="description"
+            content="Patisoru - Evcil hayvanınız hakkında her şeyi sorun"
+        />
+        <meta name="viewport" content="width=device-width" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <meta name="generator" content={Astro.generator} />
+        <title>{title} | Patisoru</title>
+    </head>
+    <body class="min-h-screen bg-background font-sans antialiasedflex flex-col">
+        <main class="grow">
+            <slot />
+        </main>
+    </body>
+</html>

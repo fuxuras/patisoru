@@ -1,0 +1,10 @@
+---
+import Layout from "@/layouts/Layout.astro"
+import { AuthForm } from "@/components/react/AuthForm"
+---
+
+<Layout title="Kayıt Ol">
+    <div class="grow flex items-center justify-center py-12">
+        <AuthForm mode="register" client:load />
+    </div>
+</Layout>
