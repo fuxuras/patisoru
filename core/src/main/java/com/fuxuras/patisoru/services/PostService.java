@@ -7,10 +7,9 @@ import com.fuxuras.patisoru.entities.Post;
 import com.fuxuras.patisoru.entities.PostType;
 import com.fuxuras.patisoru.entities.User;
 import com.fuxuras.patisoru.exceptions.PostNotFoundException;
-import com.fuxuras.patisoru.exceptions.UnauthorizedPostAccessException;
 import com.fuxuras.patisoru.repositories.PostRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -23,22 +22,27 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
-@RequiredArgsConstructor
 public class PostService {
     private final PostRepository postRepository;
     private final DtoMapper mapper;
     private final UserService userService;
     private final LikeService likeService;
 
+    public PostService(PostRepository postRepository, DtoMapper mapper, UserService userService, @Lazy LikeService likeService) {
+        this.postRepository = postRepository;
+        this.mapper = mapper;
+        this.userService = userService;
+        this.likeService = likeService;
+    }
 
     public PostResponse getPostById(UUID id, UserDetails userDetails) {
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new PostNotFoundException("Post not found with id: " + id));
 
-        PostResponse postResponse =mapper.postToPostResponse(post);
+        PostResponse postResponse = mapper.postToPostResponse(post);
 
         String userLikeStatus = "remove";
-        if (userDetails != null){
+        if (userDetails != null) {
             userLikeStatus = likeService.getStatus(post.getId(), userDetails.getUsername());
         }
         postResponse.setUserLikeStatus(userLikeStatus);
@@ -49,10 +53,9 @@ public class PostService {
     public List<PostResponse> getFeaturedPosts() {
         List<Post> posts = postRepository
                 .findTop5ByCreatedAtAfterOrderByLikeCountDesc(LocalDateTime.now().minusMonths(1));
-        List<PostResponse> postResponse = posts.stream()
+        return posts.stream()
                 .map(mapper::postToPostResponse)
                 .toList();
-        return postResponse;
     }
 
     public Page<PostResponse> getAllPosts(Pageable pageable) {
@@ -65,7 +68,6 @@ public class PostService {
         Post post = mapper.PostCreateRequestToPost(postCreateRequest);
         post.setUser(user);
 
-        // Automatically determine the PostType based on user roles
         if (user.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_VET"))) {
             post.setPostType(PostType.VET_POST);
         } else if (user.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_VERIFIED"))) {
@@ -79,11 +81,9 @@ public class PostService {
     }
 
     @PreAuthorize("@postSecurityService.isOwner(authentication,#postId)")
-    public void deletePost(UUID postId){
-        Post post = postRepository.findById(postId)
+    public void deletePost(UUID postId) {
+        postRepository.findById(postId)
                 .orElseThrow(() -> new PostNotFoundException("Post not found with id: " + postId));
-
-
         postRepository.deleteById(postId);
     }
 
