@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { jwtToken } from '@/store/auth';
+import { $jwtToken } from '@/store/auth';
 
 const apiClient = axios.create({
     baseURL: 'http://localhost:8080/api',
@@ -7,7 +7,7 @@ const apiClient = axios.create({
 
 apiClient.interceptors.request.use(
     (config) => {
-        const token = jwtToken.get();
+        const token = $jwtToken.get();
 
         if (token) {
             config.headers.Authorization = `Bearer ${token}`;
