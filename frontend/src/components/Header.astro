@@ -1,0 +1,50 @@
+---
+// src/components/Header.astro
+import AuthStatus from './react/AuthStatus.jsx';
+import AuthStatusMobile from './react/AuthStatusMobile.jsx';
+---
+
+<header class="bg-white shadow-md">
+  <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+    <div class="text-2xl font-bold text-gray-800">
+      <a href="/">Patisoru</a>
+    </div>
+    <div class="hidden md:flex items-center space-x-6">
+      <a href="/" class="text-gray-600 hover:text-blue-600">Home</a>
+      <AuthStatus client:load />
+    </div>
+    <div class="md:hidden">
+      <button id="mobile-menu-button" class="text-gray-800 focus:outline-none">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+        </svg>
+      </button>
+    </div>
+  </nav>
+  <div id="mobile-menu" class="hidden md:hidden">
+    <a href="/" class="block px-6 py-2 text-gray-600 hover:bg-gray-100">Home</a>
+    <AuthStatusMobile client:load />
+  </div>
+</header>
+
+<script>
+  import { logout } from '../store/auth';
+
+  // --- Mobile Menu Toggle ---
+  const mobileMenuButton = document.getElementById('mobile-menu-button');
+  const mobileMenu = document.getElementById('mobile-menu');
+  mobileMenuButton?.addEventListener('click', () => {
+    mobileMenu?.classList.toggle('hidden');
+  });
+
+  // --- Logout Logic ---
+  // We need to use event delegation because the buttons are in a React component
+  // and might not exist when this script first runs.
+  document.addEventListener('click', (event) => {
+    const target = event.target;
+    if (target.id === 'logout-btn-desktop' || target.id === 'logout-btn-mobile') {
+      logout();
+      window.location.href = '/login';
+    }
+  });
+</script>
